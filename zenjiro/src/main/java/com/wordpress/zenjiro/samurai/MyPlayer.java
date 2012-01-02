@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
@@ -92,6 +93,15 @@ public class MyPlayer {
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
 	private Distance getDistance(final Chara chara) {
+		int[][] distance = new int[this.map.getHeight()][this.map.getWidth()];
+		Direction[][] path = new Direction[this.map.getHeight()][this.map
+				.getWidth()];
+		for (int i = 0; i < this.map.getHeight(); i++) {
+			distance[i] = new int[this.map.getWidth()];
+			Arrays.fill(distance[i], Integer.MAX_VALUE);
+			path[i] = new Direction[this.map.getWidth()];
+			Arrays.fill(path[i], Direction.UNKNOWN);
+		}
 		return null;
 	}
 
