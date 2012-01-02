@@ -96,7 +96,7 @@ public class MyPlayer {
 	}
 
 	/**
-	 * 再帰的に探索します。
+	 * 深さ優先で探索します。
 	 * @param x 始点のx座標
 	 * @param y 始点のy座標
 	 * @param distance 各地点への最短距離
