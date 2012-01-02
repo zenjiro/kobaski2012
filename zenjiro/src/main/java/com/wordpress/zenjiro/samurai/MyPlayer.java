@@ -67,6 +67,12 @@ public class MyPlayer {
 			this.distance = distance;
 			this.path = path;
 		}
+
+		@Override
+		public String toString() {
+			return "distance = " + Arrays.deepToString(this.distance)
+					+ ", path = " + Arrays.deepToString(this.path);
+		}
 	}
 
 	/**
