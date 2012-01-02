@@ -13,21 +13,28 @@ import jp.ac.waseda.cs.washi.samurai.api.Map;
 
 public class MyPlayer {
 	private Map map;
+	private boolean isSamurai;
 
 	public void run(final Scanner sc) {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
-		final Chara samurai = this.map.getMySamurai();
-		if (this.map.isMovable(samurai, Direction.DOWN)) {
-			System.out.println("DOWN");
+		if (this.isSamurai) {
+			final Chara samurai = this.map.getMySamurai();
+			if (this.map.isMovable(samurai, Direction.DOWN)) {
+				System.out.println("DOWN");
+			} else {
+				System.out.println("NONE");
+			}
 		} else {
 			System.out.println("NONE");
 		}
+		this.isSamurai = !this.isSamurai;
 	}
 
 	private BufferedWriter _writer;
 
 	public MyPlayer() {
+		this.isSamurai = true;
 		try {
 			final FileOutputStream fos = new FileOutputStream("log_java_jp.txt");
 			this._writer = new BufferedWriter(new OutputStreamWriter(fos));
