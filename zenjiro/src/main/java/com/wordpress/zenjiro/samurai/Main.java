@@ -1,4 +1,4 @@
-package jp.ac.waseda.cs.washi.samurai.main;
+package com.wordpress.zenjiro.samurai;
 
 import java.util.Scanner;
 
