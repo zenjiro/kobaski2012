@@ -11,7 +11,7 @@ import jp.ac.waseda.cs.washi.samurai.api.Chara;
 import jp.ac.waseda.cs.washi.samurai.api.Direction;
 import jp.ac.waseda.cs.washi.samurai.api.Map;
 
-public class YourPlayer {
+public class MyPlayer {
 
 	private int _count = 0;
 	private Map _map;
@@ -55,7 +55,7 @@ public class YourPlayer {
 
 	private BufferedWriter _writer;
 
-	public YourPlayer() {
+	public MyPlayer() {
 		try {
 			FileOutputStream fos = new FileOutputStream("log_java_jp.txt");
 			_writer = new BufferedWriter(new OutputStreamWriter(fos));
