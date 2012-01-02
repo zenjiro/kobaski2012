@@ -2,9 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wordpress.zenjiro</groupId>
-	<artifactId>hello</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Hello</name>
 	<build>
 		<plugins>
 			<plugin>
@@ -18,4 +16,6 @@
 			</plugin>
 		</plugins>
 	</build>
+	<artifactId>kobaski2012</artifactId>
+	<name>kobaski2012</name>
 </project>
