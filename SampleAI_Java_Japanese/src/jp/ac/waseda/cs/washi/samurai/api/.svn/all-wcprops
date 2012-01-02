@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api
+END
+CharaState.java
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/CharaState.java
+END
+CharaType.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/CharaType.java
+END
+Direction.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/Direction.java
+END
+BonusType.java
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/BonusType.java
+END
+Map.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/Map.java
+END
+Chara.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/!svn/ver/1645/MagicalHunter2011/trunk/release/archives/2.0.4/SampleAI_Java_Japanese/src/jp/ac/waseda/cs/washi/samurai/api/Chara.java
+END
