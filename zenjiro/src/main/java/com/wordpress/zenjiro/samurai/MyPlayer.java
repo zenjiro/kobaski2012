@@ -15,18 +15,15 @@ public class MyPlayer {
 	private int count = 0;
 	private Map map;
 
-	// returns a player action
 	private String getRandomAction() {
-		switch (this.count * 11 % 5) {
+		switch (this.count * 11 % 4) {
 		case 0:
-			return "NONE";
-		case 1:
 			return "RIGHT";
-		case 2:
+		case 1:
 			return "UP";
-		case 3:
+		case 2:
 			return "LEFT";
-		case 4:
+		case 3:
 			return "DOWN";
 		default:
 			throw new RuntimeException();
