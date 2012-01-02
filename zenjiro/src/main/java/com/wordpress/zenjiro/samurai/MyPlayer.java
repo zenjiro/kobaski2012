@@ -102,7 +102,7 @@ public class MyPlayer {
 			path[i] = new Direction[this.map.getWidth()];
 			Arrays.fill(path[i], Direction.UNKNOWN);
 		}
-		return null;
+		return new Distance(distance, path);
 	}
 
 	private BufferedWriter writer;
