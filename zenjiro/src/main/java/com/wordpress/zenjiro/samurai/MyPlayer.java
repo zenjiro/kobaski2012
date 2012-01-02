@@ -60,6 +60,41 @@ public class MyPlayer {
 		this.isSamurai = !this.isSamurai;
 	}
 
+	/**
+	 * 各地点への最短距離と経路
+	 */
+	static class Distance {
+		/**
+		 * 各地点への最短距離
+		 * distance[y][x]
+		 */
+		final int[][] distance;
+		/**
+		 * 各地点への最短経路
+		 * 1つ手前の地点からその地点へ入る向き
+		 * path[y][x]
+		 */
+		final Direction[][] path;
+
+		/**
+		 * コンストラクタ
+		 * @param distance 各地点への最短距離
+		 * @param path 各地点への最短経路
+		 */
+		public Distance(final int[][] distance, final Direction[][] path) {
+			this.distance = distance;
+			this.path = path;
+		}
+	}
+
+	/**
+	 * @param chara 始点とするChara
+	 * @return 指定したCharaから各地点への最短距離と経路
+	 */
+	private Distance getDistance(final Chara chara) {
+		return null;
+	}
+
 	private BufferedWriter writer;
 
 	public MyPlayer() {
