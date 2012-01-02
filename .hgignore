@@ -1,3 +1,4 @@
 syntax: glob
 *.class
 log_java_jp.txt
+error_player1.txt
