@@ -34,9 +34,7 @@ public class MyPlayer {
 	}
 
 	public void run(final Scanner sc) {
-		// TODO: ここにあなたのAIプログラムを書いてください！
 		this._map = Map.createOrUpdateMap(this._map, sc);
-		// for debug (you can remove this statement)
 		this.log();
 		if (this._count % 2 == 0) {
 			System.out.println(this.getRandomAction());
