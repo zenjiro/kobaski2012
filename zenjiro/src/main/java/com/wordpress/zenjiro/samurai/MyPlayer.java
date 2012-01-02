@@ -12,10 +12,23 @@ import jp.ac.waseda.cs.washi.samurai.api.Chara;
 import jp.ac.waseda.cs.washi.samurai.api.Direction;
 import jp.ac.waseda.cs.washi.samurai.api.Map;
 
+/**
+ * プレイヤの実装
+ */
 public class MyPlayer {
+	/**
+	 * マップ
+	 */
 	private Map map;
+	/**
+	 * 侍の番かどうか
+	 */
 	private boolean isSamurai;
 
+	/**
+	 * 自分の番の時に呼び出されます。
+	 * @param sc スキャナ
+	 */
 	public void run(final Scanner sc) {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
@@ -116,8 +129,14 @@ public class MyPlayer {
 	private void search(int x, int y, int[][] distance, Direction[][] path) {
 	}
 
+	/**
+	 * ログ出力用のライタ
+	 */
 	private BufferedWriter writer;
 
+	/**
+	 * コンストラクタ
+	 */
 	public MyPlayer() {
 		this.isSamurai = true;
 		try {
@@ -127,6 +146,9 @@ public class MyPlayer {
 		}
 	}
 
+	/**
+	 * ログを記録します。
+	 */
 	public void log() {
 		try {
 			this.writer.write(this.map.getRemainingTime() + ", ");
