@@ -60,45 +60,45 @@ public class MyPlayer {
 		this.isSamurai = !this.isSamurai;
 	}
 
-	private BufferedWriter _writer;
+	private BufferedWriter writer;
 
 	public MyPlayer() {
 		this.isSamurai = true;
 		try {
 			final FileOutputStream fos = new FileOutputStream("log_java_jp.txt");
-			this._writer = new BufferedWriter(new OutputStreamWriter(fos));
+			this.writer = new BufferedWriter(new OutputStreamWriter(fos));
 		} catch (final FileNotFoundException e) {
 		}
 	}
 
 	public void log() {
 		try {
-			this._writer.write(this.map.getRemainingTime() + ", ");
-			this._writer.write(this.map.getPlayerIndex() + ", ");
-			this._writer.write(this.map.getWidth() + ", ");
-			this._writer.write(this.map.getHeight() + "\r\n");
+			this.writer.write(this.map.getRemainingTime() + ", ");
+			this.writer.write(this.map.getPlayerIndex() + ", ");
+			this.writer.write(this.map.getWidth() + ", ");
+			this.writer.write(this.map.getHeight() + "\r\n");
 			for (final Chara chara : this.map.getAllCharas()) {
 				for (int i = 0; i < 4; i++) {
-					this._writer.write(this.map.isMovable(chara,
+					this.writer.write(this.map.isMovable(chara,
 							Direction.values()[i])
 							+ ", ");
 				}
-				this._writer.write("\r\n");
+				this.writer.write("\r\n");
 			}
 			for (final Chara samurai : this.map.getAllSamurais()) {
-				this._writer.write(this.map.isAvailable(samurai.getX(),
+				this.writer.write(this.map.isAvailable(samurai.getX(),
 						samurai.getY())
 						+ ", ");
-				this._writer.write("{ X = " + samurai.getX() + ", Y = "
+				this.writer.write("{ X = " + samurai.getX() + ", Y = "
 						+ samurai.getY() + " }" + "\r\n");
 			}
 			for (final Chara dog : this.map.getAllDogs()) {
-				this._writer.write(this.map.isAvailable(dog.getX(), dog.getY())
+				this.writer.write(this.map.isAvailable(dog.getX(), dog.getY())
 						+ ", ");
-				this._writer.write("{ X = " + dog.getX() + ", Y = "
-						+ dog.getY() + " }" + "\r\n");
+				this.writer.write("{ X = " + dog.getX() + ", Y = " + dog.getY()
+						+ " }" + "\r\n");
 			}
-			this._writer.flush();
+			this.writer.flush();
 		} catch (final IOException e) {
 		}
 	}
