@@ -34,7 +34,7 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			// 侍から各地点への最短距離と経路を求めてみる。
-			System.err.println(this.getDistance(this.map.getMySamurai()));
+			final Distance distance = this.getDistance(this.map.getMySamurai());
 			System.out.println("NONE");
 		} else {
 			System.out.println("NONE");
@@ -109,26 +109,59 @@ public class MyPlayer {
 				&& d < distance[y + 1][x]) {
 			distance[y + 1][x] = d;
 			path[y + 1][x] = Direction.DOWN;
-			search(x, y + 1, distance, path);
+			this.search(x, y + 1, distance, path);
 		}
 		if (this.map.isAvailable(x + 1, y) && !this.map.isWall(x + 1, y)
 				&& d < distance[y][x + 1]) {
 			distance[y][x + 1] = d;
 			path[y][x + 1] = Direction.RIGHT;
-			search(x + 1, y, distance, path);
+			this.search(x + 1, y, distance, path);
 		}
 		if (this.map.isAvailable(x, y - 1) && !this.map.isWall(x, y - 1)
 				&& d < distance[y - 1][x]) {
 			distance[y - 1][x] = d;
 			path[y - 1][x] = Direction.UP;
-			search(x, y - 1, distance, path);
+			this.search(x, y - 1, distance, path);
 		}
 		if (this.map.isAvailable(x - 1, y) && !this.map.isWall(x - 1, y)
 				&& d < distance[y][x - 1]) {
 			distance[y][x - 1] = d;
 			path[y][x - 1] = Direction.LEFT;
-			search(x - 1, y, distance, path);
+			this.search(x - 1, y, distance, path);
 		}
+	}
+
+	/**
+	 * @param x 目的地のx座標
+	 * @param y 目的地のy座標
+	 * @param path 各地点への最短経路
+	 * @return 指定した地点へ向かうパスの最初の方向
+	 */
+	private Direction getDirection(int x, int y, Direction[][] path) {
+		Direction direction = Direction.UNKNOWN;
+		loop: while (true) {
+			switch (path[y][x]) {
+			case DOWN:
+				direction = path[y][x];
+				y--;
+				break;
+			case RIGHT:
+				direction = path[y][x];
+				x--;
+				break;
+			case UP:
+				direction = path[y][x];
+				y++;
+				break;
+			case LEFT:
+				direction = path[y][x];
+				x++;
+				break;
+			case UNKNOWN:
+				break loop;
+			}
+		}
+		return direction;
 	}
 
 	/**
