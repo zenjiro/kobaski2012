@@ -20,6 +20,7 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			final Chara samurai = this.map.getMySamurai();
+			// 下に動けるときは動く
 			if (this.map.isMovable(samurai, Direction.DOWN)) {
 				System.out.println("DOWN");
 			} else {
