@@ -1,5 +1,6 @@
 package com.wordpress.zenjiro.samurai;
 
+import java.awt.Point;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,11 +37,41 @@ public class MyPlayer {
 		if (this.isSamurai) {
 			final Distance distance = this.getDistance(this.map.getMySamurai(),
 					true);
-			// とりあえずプレイヤを追いかけてみる。
-			final Chara target = this.map.getSamurai(1);
-			if (target.getState() != CharaState.INVISIBLE) {
-				System.out.println(this.getDirection(target.getX(),
-						target.getY(), distance.path));
+			// 最寄りのボーナスを追いかける。
+			Point nearestBig = null;
+			Point nearestSmall = null;
+			int minBigDistance = Integer.MAX_VALUE;
+			int minSmallDistance = Integer.MAX_VALUE;
+			for (int i = 0; i < this.map.getHeight(); i++) {
+				for (int j = 0; j < this.map.getWidth(); j++) {
+					switch (this.map.getBonus(j, i)) {
+					case SHOGUN:
+						if (distance.distance[i][j] < minBigDistance) {
+							nearestBig = new Point(j, i);
+							minBigDistance = distance.distance[i][j];
+						}
+						break;
+					case BIG:
+						if (distance.distance[i][j] < minBigDistance) {
+							nearestBig = new Point(j, i);
+							minBigDistance = distance.distance[i][j];
+						}
+						break;
+					case SMALL:
+						if (distance.distance[i][j] < minSmallDistance) {
+							nearestSmall = new Point(j, i);
+							minSmallDistance = distance.distance[i][j];
+						}
+						break;
+					}
+				}
+			}
+			if (nearestBig != null) {
+				System.out.println(this.getDirection(nearestBig.x,
+						nearestBig.y, distance.path));
+			} else if (nearestSmall != null) {
+				System.out.println(this.getDirection(nearestSmall.x,
+						nearestSmall.y, distance.path));
 			} else {
 				System.out.println("NONE");
 			}
