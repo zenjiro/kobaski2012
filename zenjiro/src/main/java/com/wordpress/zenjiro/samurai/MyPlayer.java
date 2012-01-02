@@ -20,9 +20,37 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			final Chara samurai = this.map.getMySamurai();
-			// 下に動けるときは動く
-			if (this.map.isMovable(samurai, Direction.DOWN)) {
-				System.out.println("DOWN");
+			// 敵の犬が隣に来たら逃げる
+			Chara nearestDog = null;
+			int minDistance = Integer.MAX_VALUE;
+			for (final Chara dog : this.map.getAllDogs()) {
+				if (dog != this.map.getMyDog()) {
+					final int distance = Math.abs(dog.getX()
+							- this.map.getMySamurai().getX())
+							+ Math.abs(dog.getY()
+									- this.map.getMySamurai().getY());
+					if (distance < minDistance) {
+						nearestDog = dog;
+						minDistance = distance;
+					}
+				}
+			}
+			if (minDistance < 2) {
+				if (this.map.isMovable(samurai, Direction.DOWN)
+						&& nearestDog.getY() <= samurai.getY()) {
+					System.out.println("DOWN");
+				} else if (this.map.isMovable(samurai, Direction.UP)
+						&& nearestDog.getY() >= samurai.getY()) {
+					System.out.println("UP");
+				} else if (this.map.isMovable(samurai, Direction.RIGHT)
+						&& nearestDog.getX() <= samurai.getX()) {
+					System.out.println("RIGHT");
+				} else if (this.map.isMovable(samurai, Direction.LEFT)
+						&& nearestDog.getX() >= samurai.getX()) {
+					System.out.println("LEFT");
+				} else {
+					System.out.println("NONE");
+				}
 			} else {
 				System.out.println("NONE");
 			}
