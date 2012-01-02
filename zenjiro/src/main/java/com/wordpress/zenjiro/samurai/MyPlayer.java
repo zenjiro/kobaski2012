@@ -36,7 +36,7 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			final Distance distance = this.getDistance(this.map.getMySamurai(),
-					true);
+					this.map.getMySamurai().getState() != CharaState.SHOGUN);
 			// 最寄りのボーナスを追いかける。
 			Point nearestBig = null;
 			Point nearestSmall = null;
