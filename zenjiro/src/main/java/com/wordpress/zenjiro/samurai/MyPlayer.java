@@ -33,6 +33,8 @@ public class MyPlayer {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
 		if (this.isSamurai) {
+			// 侍から各地点への最短距離と経路を求めてみる。
+			System.err.println(getDistance(this.map.getMySamurai()));
 			System.out.println("NONE");
 		} else {
 			System.out.println("NONE");
