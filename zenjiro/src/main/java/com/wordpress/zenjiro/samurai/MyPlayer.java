@@ -90,6 +90,7 @@ public class MyPlayer {
 			path[i] = new Direction[this.map.getWidth()];
 			Arrays.fill(path[i], Direction.UNKNOWN);
 		}
+		distance[chara.getY()][chara.getX()] = 0;
 		this.search(chara.getX(), chara.getY(), distance, path);
 		return new Distance(distance, path);
 	}
@@ -103,6 +104,31 @@ public class MyPlayer {
 	 */
 	private void search(final int x, final int y, final int[][] distance,
 			final Direction[][] path) {
+		final int d = distance[y][x] + 1;
+		if (this.map.isAvailable(x, y + 1) && !this.map.isWall(x, y + 1)
+				&& d < distance[y + 1][x]) {
+			distance[y + 1][x] = d;
+			path[y + 1][x] = Direction.DOWN;
+			search(x, y + 1, distance, path);
+		}
+		if (this.map.isAvailable(x + 1, y) && !this.map.isWall(x + 1, y)
+				&& d < distance[y][x + 1]) {
+			distance[y][x + 1] = d;
+			path[y][x + 1] = Direction.RIGHT;
+			search(x + 1, y, distance, path);
+		}
+		if (this.map.isAvailable(x, y - 1) && !this.map.isWall(x, y - 1)
+				&& d < distance[y - 1][x]) {
+			distance[y - 1][x] = d;
+			path[y - 1][x] = Direction.UP;
+			search(x, y - 1, distance, path);
+		}
+		if (this.map.isAvailable(x - 1, y) && !this.map.isWall(x - 1, y)
+				&& d < distance[y][x - 1]) {
+			distance[y][x - 1] = d;
+			path[y][x - 1] = Direction.LEFT;
+			search(x - 1, y, distance, path);
+		}
 	}
 
 	/**
