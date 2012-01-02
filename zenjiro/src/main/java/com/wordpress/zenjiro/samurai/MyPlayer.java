@@ -35,7 +35,7 @@ public class MyPlayer {
 					}
 				}
 			}
-			if (minDistance < 2) {
+			if (minDistance < 5) {
 				if (this.map.isMovable(samurai, Direction.DOWN)
 						&& nearestDog.getY() <= samurai.getY()) {
 					System.out.println("DOWN");
