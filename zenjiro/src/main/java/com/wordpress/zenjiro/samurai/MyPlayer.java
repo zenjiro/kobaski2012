@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
+import jp.ac.waseda.cs.washi.samurai.api.CharaState;
 import jp.ac.waseda.cs.washi.samurai.api.Direction;
 import jp.ac.waseda.cs.washi.samurai.api.Map;
 
@@ -34,12 +35,24 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			final Distance distance = this.getDistance(this.map.getMySamurai());
-			// とりあえずプレイヤ1を追いかけてみる。
+			// とりあえずプレイヤを追いかけてみる。
 			final Chara target = this.map.getSamurai(1);
-			System.out.println(this.getDirection(target.getX(), target.getY(),
-					distance.path));
+			if (target.getState() != CharaState.INVISIBLE) {
+				System.out.println(this.getDirection(target.getX(),
+						target.getY(), distance.path));
+			} else {
+				System.out.println("NONE");
+			}
 		} else {
-			System.out.println("NONE");
+			// とりあえずプレイヤ1をひたすら追いかけさせる。
+			final Distance distance = this.getDistance(this.map.getMyDog());
+			final Chara target = this.map.getSamurai(1);
+			if (target.getState() != CharaState.INVISIBLE) {
+				System.out.println(this.getDirection(target.getX(),
+						target.getY(), distance.path));
+			} else {
+				System.out.println("NONE");
+			}
 		}
 		this.isSamurai = !this.isSamurai;
 	}
