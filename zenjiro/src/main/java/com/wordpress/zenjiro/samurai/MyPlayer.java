@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Random;
 import java.util.Scanner;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
@@ -12,37 +13,24 @@ import jp.ac.waseda.cs.washi.samurai.api.Direction;
 import jp.ac.waseda.cs.washi.samurai.api.Map;
 
 public class MyPlayer {
-	private int count = 0;
 	private Map map;
-
-	private String getRandomAction() {
-		switch (this.count * 11 % 4) {
-		case 0:
-			return "RIGHT";
-		case 1:
-			return "UP";
-		case 2:
-			return "LEFT";
-		case 3:
-			return "DOWN";
-		default:
-			throw new RuntimeException();
-		}
-	}
 
 	public void run(final Scanner sc) {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
-		if (this.count % 2 == 0) {
-			System.out.println(this.getRandomAction());
-		} else {
-			System.out.println(this.getRandomAction());
+		switch (new Random().nextInt(4)) {
+		case 0:
+			System.out.println("RIGHT");
+		case 1:
+			System.out.println("UP");
+		case 2:
+			System.out.println("LEFT");
+		case 3:
+			System.out.println("DOWN");
 		}
-		this.count++;
 		System.out.flush();
 	}
 
-	// ----------- debug code (you can remove the following code) -----------
 	private BufferedWriter _writer;
 
 	public MyPlayer() {
@@ -84,5 +72,4 @@ public class MyPlayer {
 		} catch (final IOException e) {
 		}
 	}
-	// ----------------------------------------------------------------------
 }
