@@ -33,9 +33,11 @@ public class MyPlayer {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
 		if (this.isSamurai) {
-			// 侍から各地点への最短距離と経路を求めてみる。
 			final Distance distance = this.getDistance(this.map.getMySamurai());
-			System.out.println("NONE");
+			// とりあえずプレイヤ1を追いかけてみる。
+			final Chara target = this.map.getSamurai(1);
+			System.out.println(this.getDirection(target.getX(), target.getY(),
+					distance.path));
 		} else {
 			System.out.println("NONE");
 		}
@@ -137,7 +139,7 @@ public class MyPlayer {
 	 * @param path 各地点への最短経路
 	 * @return 指定した地点へ向かうパスの最初の方向
 	 */
-	private Direction getDirection(int x, int y, Direction[][] path) {
+	private Direction getDirection(int x, int y, final Direction[][] path) {
 		Direction direction = Direction.UNKNOWN;
 		loop: while (true) {
 			switch (path[y][x]) {
