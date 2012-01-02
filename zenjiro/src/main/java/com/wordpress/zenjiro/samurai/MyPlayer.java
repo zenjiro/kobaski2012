@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Random;
 import java.util.Scanner;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
@@ -18,17 +17,12 @@ public class MyPlayer {
 	public void run(final Scanner sc) {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
-		switch (new Random().nextInt(4)) {
-		case 0:
-			System.out.println("RIGHT");
-		case 1:
-			System.out.println("UP");
-		case 2:
-			System.out.println("LEFT");
-		case 3:
+		final Chara samurai = this.map.getMySamurai();
+		if (this.map.isMovable(samurai, Direction.DOWN)) {
 			System.out.println("DOWN");
+		} else {
+			System.out.println("NONE");
 		}
-		System.out.flush();
 	}
 
 	private BufferedWriter _writer;
