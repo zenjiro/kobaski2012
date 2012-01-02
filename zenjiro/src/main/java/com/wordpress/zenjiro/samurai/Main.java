@@ -2,11 +2,17 @@ package com.wordpress.zenjiro.samurai;
 
 import java.util.Scanner;
 
+/**
+ * メイン
+ */
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		MyPlayer player = new MyPlayer();
-
+	/**
+	 * メインメソッド
+	 * @param args 引数
+	 */
+	public static void main(final String[] args) {
+		final Scanner sc = new Scanner(System.in);
+		final MyPlayer player = new MyPlayer();
 		while (true) {
 			player.run(sc);
 		}
