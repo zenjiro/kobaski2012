@@ -34,7 +34,7 @@ public class MyPlayer {
 		this.log();
 		if (this.isSamurai) {
 			// 侍から各地点への最短距離と経路を求めてみる。
-			System.err.println(getDistance(this.map.getMySamurai()));
+			System.err.println(this.getDistance(this.map.getMySamurai()));
 			System.out.println("NONE");
 		} else {
 			System.out.println("NONE");
@@ -80,8 +80,9 @@ public class MyPlayer {
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
 	private Distance getDistance(final Chara chara) {
-		int[][] distance = new int[this.map.getHeight()][this.map.getWidth()];
-		Direction[][] path = new Direction[this.map.getHeight()][this.map
+		final int[][] distance = new int[this.map.getHeight()][this.map
+				.getWidth()];
+		final Direction[][] path = new Direction[this.map.getHeight()][this.map
 				.getWidth()];
 		for (int i = 0; i < this.map.getHeight(); i++) {
 			distance[i] = new int[this.map.getWidth()];
@@ -89,7 +90,7 @@ public class MyPlayer {
 			path[i] = new Direction[this.map.getWidth()];
 			Arrays.fill(path[i], Direction.UNKNOWN);
 		}
-		search(chara.getX(), chara.getY(), distance, path);
+		this.search(chara.getX(), chara.getY(), distance, path);
 		return new Distance(distance, path);
 	}
 
@@ -100,7 +101,8 @@ public class MyPlayer {
 	 * @param distance 各地点への最短距離
 	 * @param path 各地点への最短経路
 	 */
-	private void search(int x, int y, int[][] distance, Direction[][] path) {
+	private void search(final int x, final int y, final int[][] distance,
+			final Direction[][] path) {
 	}
 
 	/**
