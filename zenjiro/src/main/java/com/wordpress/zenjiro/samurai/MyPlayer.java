@@ -12,12 +12,12 @@ import jp.ac.waseda.cs.washi.samurai.api.Direction;
 import jp.ac.waseda.cs.washi.samurai.api.Map;
 
 public class MyPlayer {
-	private int _count = 0;
-	private Map _map;
+	private int count = 0;
+	private Map map;
 
 	// returns a player action
 	private String getRandomAction() {
-		switch (this._count * 11 % 5) {
+		switch (this.count * 11 % 5) {
 		case 0:
 			return "NONE";
 		case 1:
@@ -34,14 +34,14 @@ public class MyPlayer {
 	}
 
 	public void run(final Scanner sc) {
-		this._map = Map.createOrUpdateMap(this._map, sc);
+		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
-		if (this._count % 2 == 0) {
+		if (this.count % 2 == 0) {
 			System.out.println(this.getRandomAction());
 		} else {
 			System.out.println(this.getRandomAction());
 		}
-		this._count++;
+		this.count++;
 		System.out.flush();
 	}
 
@@ -58,28 +58,28 @@ public class MyPlayer {
 
 	public void log() {
 		try {
-			this._writer.write(this._map.getRemainingTime() + ", ");
-			this._writer.write(this._map.getPlayerIndex() + ", ");
-			this._writer.write(this._map.getWidth() + ", ");
-			this._writer.write(this._map.getHeight() + "\r\n");
-			for (final Chara chara : this._map.getAllCharas()) {
+			this._writer.write(this.map.getRemainingTime() + ", ");
+			this._writer.write(this.map.getPlayerIndex() + ", ");
+			this._writer.write(this.map.getWidth() + ", ");
+			this._writer.write(this.map.getHeight() + "\r\n");
+			for (final Chara chara : this.map.getAllCharas()) {
 				for (int i = 0; i < 4; i++) {
-					this._writer.write(this._map.isMovable(chara,
+					this._writer.write(this.map.isMovable(chara,
 							Direction.values()[i])
 							+ ", ");
 				}
 				this._writer.write("\r\n");
 			}
-			for (final Chara samurai : this._map.getAllSamurais()) {
-				this._writer.write(this._map.isAvailable(samurai.getX(),
-						samurai.getY()) + ", ");
+			for (final Chara samurai : this.map.getAllSamurais()) {
+				this._writer.write(this.map.isAvailable(samurai.getX(),
+						samurai.getY())
+						+ ", ");
 				this._writer.write("{ X = " + samurai.getX() + ", Y = "
 						+ samurai.getY() + " }" + "\r\n");
 			}
-			for (final Chara dog : this._map.getAllDogs()) {
-				this._writer
-						.write(this._map.isAvailable(dog.getX(), dog.getY())
-								+ ", ");
+			for (final Chara dog : this.map.getAllDogs()) {
+				this._writer.write(this.map.isAvailable(dog.getX(), dog.getY())
+						+ ", ");
 				this._writer.write("{ X = " + dog.getX() + ", Y = "
 						+ dog.getY() + " }" + "\r\n");
 			}
