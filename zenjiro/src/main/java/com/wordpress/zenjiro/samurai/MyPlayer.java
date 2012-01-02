@@ -102,7 +102,18 @@ public class MyPlayer {
 			path[i] = new Direction[this.map.getWidth()];
 			Arrays.fill(path[i], Direction.UNKNOWN);
 		}
+		search(chara.getX(), chara.getY(), distance, path);
 		return new Distance(distance, path);
+	}
+
+	/**
+	 * 再帰的に探索します。
+	 * @param x 始点のx座標
+	 * @param y 始点のy座標
+	 * @param distance 各地点への最短距離
+	 * @param path 各地点への最短経路
+	 */
+	private void search(int x, int y, int[][] distance, Direction[][] path) {
 	}
 
 	private BufferedWriter writer;
