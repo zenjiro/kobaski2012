@@ -34,7 +34,8 @@ public class MyPlayer {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
 		if (this.isSamurai) {
-			final Distance distance = this.getDistance(this.map.getMySamurai());
+			final Distance distance = this.getDistance(this.map.getMySamurai(),
+					true);
 			// とりあえずプレイヤを追いかけてみる。
 			final Chara target = this.map.getSamurai(1);
 			if (target.getState() != CharaState.INVISIBLE) {
@@ -45,7 +46,8 @@ public class MyPlayer {
 			}
 		} else {
 			// とりあえずプレイヤ1をひたすら追いかけさせる。
-			final Distance distance = this.getDistance(this.map.getMyDog());
+			final Distance distance = this.getDistance(this.map.getMyDog(),
+					false);
 			final Chara target = this.map.getSamurai(1);
 			if (target.getState() != CharaState.INVISIBLE) {
 				System.out.println(this.getDirection(target.getX(),
@@ -92,21 +94,32 @@ public class MyPlayer {
 
 	/**
 	 * @param chara 始点とするChara
+	 * @param hateDogs 敵の犬を避けるかどうか
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
-	private Distance getDistance(final Chara chara) {
+	private Distance getDistance(final Chara chara, boolean hateDogs) {
 		final int[][] distance = new int[this.map.getHeight()][this.map
 				.getWidth()];
 		final Direction[][] path = new Direction[this.map.getHeight()][this.map
+				.getWidth()];
+		final boolean[][] dogs = new boolean[this.map.getHeight()][this.map
 				.getWidth()];
 		for (int i = 0; i < this.map.getHeight(); i++) {
 			distance[i] = new int[this.map.getWidth()];
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
 			path[i] = new Direction[this.map.getWidth()];
 			Arrays.fill(path[i], Direction.UNKNOWN);
+			dogs[i] = new boolean[this.map.getWidth()];
+		}
+		if (hateDogs) {
+			for (Chara dog : this.map.getAllDogs()) {
+				if (dog != this.map.getMyDog()) {
+					dogs[dog.getY()][dog.getX()] = true;
+				}
+			}
 		}
 		distance[chara.getY()][chara.getX()] = 0;
-		this.search(chara.getX(), chara.getY(), distance, path);
+		this.search(chara.getX(), chara.getY(), distance, path, dogs);
 		return new Distance(distance, path);
 	}
 
@@ -116,33 +129,34 @@ public class MyPlayer {
 	 * @param y 始点のy座標
 	 * @param distance 各地点への最短距離
 	 * @param path 各地点への最短経路
+	 * @param dogs 敵の犬の座標
 	 */
 	private void search(final int x, final int y, final int[][] distance,
-			final Direction[][] path) {
+			final Direction[][] path, boolean[][] dogs) {
 		final int d = distance[y][x] + 1;
 		if (this.map.isAvailable(x, y + 1) && !this.map.isWall(x, y + 1)
-				&& d < distance[y + 1][x]) {
+				&& !dogs[y + 1][x] && d < distance[y + 1][x]) {
 			distance[y + 1][x] = d;
 			path[y + 1][x] = Direction.DOWN;
-			this.search(x, y + 1, distance, path);
+			this.search(x, y + 1, distance, path, dogs);
 		}
 		if (this.map.isAvailable(x + 1, y) && !this.map.isWall(x + 1, y)
-				&& d < distance[y][x + 1]) {
+				&& !dogs[y][x + 1] && d < distance[y][x + 1]) {
 			distance[y][x + 1] = d;
 			path[y][x + 1] = Direction.RIGHT;
-			this.search(x + 1, y, distance, path);
+			this.search(x + 1, y, distance, path, dogs);
 		}
 		if (this.map.isAvailable(x, y - 1) && !this.map.isWall(x, y - 1)
-				&& d < distance[y - 1][x]) {
+				&& !dogs[y - 1][x] && d < distance[y - 1][x]) {
 			distance[y - 1][x] = d;
 			path[y - 1][x] = Direction.UP;
-			this.search(x, y - 1, distance, path);
+			this.search(x, y - 1, distance, path, dogs);
 		}
 		if (this.map.isAvailable(x - 1, y) && !this.map.isWall(x - 1, y)
-				&& d < distance[y][x - 1]) {
+				&& !dogs[y][x - 1] && d < distance[y][x - 1]) {
 			distance[y][x - 1] = d;
 			path[y][x - 1] = Direction.LEFT;
-			this.search(x - 1, y, distance, path);
+			this.search(x - 1, y, distance, path, dogs);
 		}
 	}
 
