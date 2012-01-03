@@ -35,7 +35,7 @@ public class Chara {
 		this._y = sc.nextInt();
 		int direction = sc.nextInt();
 		this._direction = direction != -1 ? Direction.values()[direction]
-				: Direction.UNKNOWN;
+				: Direction.NONE;
 	}
 
 	/**

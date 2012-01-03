@@ -75,9 +75,11 @@ public class MyPlayer {
 				System.out
 						.println(this.getDirection(nearestSmall.x, nearestSmall.y, distance.path));
 			} else {
-				System.out.println("NONE");
 				if (isKilled(this.map.getMySamurai().getX(), this.map.getMySamurai().getY())) {
 					Logger.getAnonymousLogger().info("ここに留まっていると死にます。" + this.map.getMySamurai());
+					System.out.println(getSafeDirection(this.map.getMySamurai()));
+				} else {
+					System.out.println("NONE");
 				}
 			}
 		} else {
@@ -139,7 +141,7 @@ public class MyPlayer {
 			distance[i] = new int[this.map.getWidth()];
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
 			path[i] = new Direction[this.map.getWidth()];
-			Arrays.fill(path[i], Direction.UNKNOWN);
+			Arrays.fill(path[i], Direction.NONE);
 			dogs[i] = new boolean[this.map.getWidth()];
 		}
 		if (hateDogs) {
@@ -198,7 +200,7 @@ public class MyPlayer {
 	 * @return 指定した地点へ向かうパスの最初の方向
 	 */
 	private Direction getDirection(int x, int y, final Direction[][] path) {
-		Direction direction = Direction.UNKNOWN;
+		Direction direction = Direction.NONE;
 		loop: while (true) {
 			switch (path[y][x]) {
 			case DOWN:
@@ -217,7 +219,7 @@ public class MyPlayer {
 				direction = path[y][x];
 				x++;
 				break;
-			case UNKNOWN:
+			case NONE:
 				break loop;
 			}
 		}
@@ -239,6 +241,20 @@ public class MyPlayer {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param chara キャラ
+	 * @return 安全な向き
+	 */
+	private Direction getSafeDirection(Chara chara) {
+		for (Direction direction : new Direction[] { Direction.DOWN, Direction.RIGHT, Direction.UP,
+				Direction.LEFT }) {
+			if (!isKilled(chara.getX() + direction.dx, chara.getY() + direction.dy)) {
+				return direction;
+			}
+		}
+		return Direction.NONE;
 	}
 
 	/**
