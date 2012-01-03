@@ -35,8 +35,8 @@ public class MyPlayer {
 		this.map = Map.createOrUpdateMap(this.map, sc);
 		this.log();
 		if (this.isSamurai) {
-			final Distance distance = this.getDistance(this.map.getMySamurai(),
-					this.map.getMySamurai().getState() != CharaState.SHOGUN);
+			final Distance distance = this.getDistance(this.map.getMySamurai(), this.map
+					.getMySamurai().getState() != CharaState.SHOGUN);
 			// 最寄りのボーナスを追いかける。
 			Point nearestBig = null;
 			Point nearestSmall = null;
@@ -63,26 +63,25 @@ public class MyPlayer {
 							minSmallDistance = distance.distance[i][j];
 						}
 						break;
+					case NONE:
+						break;
 					}
 				}
 			}
 			if (nearestBig != null) {
-				System.out.println(this.getDirection(nearestBig.x,
-						nearestBig.y, distance.path));
+				System.out.println(this.getDirection(nearestBig.x, nearestBig.y, distance.path));
 			} else if (nearestSmall != null) {
-				System.out.println(this.getDirection(nearestSmall.x,
-						nearestSmall.y, distance.path));
+				System.out
+						.println(this.getDirection(nearestSmall.x, nearestSmall.y, distance.path));
 			} else {
 				System.out.println("NONE");
 			}
 		} else {
 			// とりあえずプレイヤ1をひたすら追いかけさせる。
-			final Distance distance = this.getDistance(this.map.getMyDog(),
-					false);
+			final Distance distance = this.getDistance(this.map.getMyDog(), false);
 			final Chara target = this.map.getSamurai(1);
 			if (target.getState() != CharaState.INVISIBLE) {
-				System.out.println(this.getDirection(target.getX(),
-						target.getY(), distance.path));
+				System.out.println(this.getDirection(target.getX(), target.getY(), distance.path));
 			} else {
 				System.out.println("NONE");
 			}
@@ -118,8 +117,8 @@ public class MyPlayer {
 
 		@Override
 		public String toString() {
-			return "distance = " + Arrays.deepToString(this.distance)
-					+ ", path = " + Arrays.deepToString(this.path);
+			return "distance = " + Arrays.deepToString(this.distance) + ", path = "
+					+ Arrays.deepToString(this.path);
 		}
 	}
 
@@ -129,12 +128,9 @@ public class MyPlayer {
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
 	private Distance getDistance(final Chara chara, boolean hateDogs) {
-		final int[][] distance = new int[this.map.getHeight()][this.map
-				.getWidth()];
-		final Direction[][] path = new Direction[this.map.getHeight()][this.map
-				.getWidth()];
-		final boolean[][] dogs = new boolean[this.map.getHeight()][this.map
-				.getWidth()];
+		final int[][] distance = new int[this.map.getHeight()][this.map.getWidth()];
+		final Direction[][] path = new Direction[this.map.getHeight()][this.map.getWidth()];
+		final boolean[][] dogs = new boolean[this.map.getHeight()][this.map.getWidth()];
 		for (int i = 0; i < this.map.getHeight(); i++) {
 			distance[i] = new int[this.map.getWidth()];
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
@@ -162,29 +158,29 @@ public class MyPlayer {
 	 * @param path 各地点への最短経路
 	 * @param dogs 敵の犬の座標
 	 */
-	private void search(final int x, final int y, final int[][] distance,
-			final Direction[][] path, boolean[][] dogs) {
+	private void search(final int x, final int y, final int[][] distance, final Direction[][] path,
+			boolean[][] dogs) {
 		final int d = distance[y][x] + 1;
-		if (this.map.isAvailable(x, y + 1) && !this.map.isWall(x, y + 1)
-				&& !dogs[y + 1][x] && d < distance[y + 1][x]) {
+		if (this.map.isAvailable(x, y + 1) && !this.map.isWall(x, y + 1) && !dogs[y + 1][x]
+				&& d < distance[y + 1][x]) {
 			distance[y + 1][x] = d;
 			path[y + 1][x] = Direction.DOWN;
 			this.search(x, y + 1, distance, path, dogs);
 		}
-		if (this.map.isAvailable(x + 1, y) && !this.map.isWall(x + 1, y)
-				&& !dogs[y][x + 1] && d < distance[y][x + 1]) {
+		if (this.map.isAvailable(x + 1, y) && !this.map.isWall(x + 1, y) && !dogs[y][x + 1]
+				&& d < distance[y][x + 1]) {
 			distance[y][x + 1] = d;
 			path[y][x + 1] = Direction.RIGHT;
 			this.search(x + 1, y, distance, path, dogs);
 		}
-		if (this.map.isAvailable(x, y - 1) && !this.map.isWall(x, y - 1)
-				&& !dogs[y - 1][x] && d < distance[y - 1][x]) {
+		if (this.map.isAvailable(x, y - 1) && !this.map.isWall(x, y - 1) && !dogs[y - 1][x]
+				&& d < distance[y - 1][x]) {
 			distance[y - 1][x] = d;
 			path[y - 1][x] = Direction.UP;
 			this.search(x, y - 1, distance, path, dogs);
 		}
-		if (this.map.isAvailable(x - 1, y) && !this.map.isWall(x - 1, y)
-				&& !dogs[y][x - 1] && d < distance[y][x - 1]) {
+		if (this.map.isAvailable(x - 1, y) && !this.map.isWall(x - 1, y) && !dogs[y][x - 1]
+				&& d < distance[y][x - 1]) {
 			distance[y][x - 1] = d;
 			path[y][x - 1] = Direction.LEFT;
 			this.search(x - 1, y, distance, path, dogs);
@@ -252,24 +248,18 @@ public class MyPlayer {
 			this.writer.write(this.map.getHeight() + "\r\n");
 			for (final Chara chara : this.map.getAllCharas()) {
 				for (int i = 0; i < 4; i++) {
-					this.writer.write(this.map.isMovable(chara,
-							Direction.values()[i])
-							+ ", ");
+					this.writer.write(this.map.isMovable(chara, Direction.values()[i]) + ", ");
 				}
 				this.writer.write("\r\n");
 			}
 			for (final Chara samurai : this.map.getAllSamurais()) {
-				this.writer.write(this.map.isAvailable(samurai.getX(),
-						samurai.getY())
-						+ ", ");
-				this.writer.write("{ X = " + samurai.getX() + ", Y = "
-						+ samurai.getY() + " }" + "\r\n");
+				this.writer.write(this.map.isAvailable(samurai.getX(), samurai.getY()) + ", ");
+				this.writer.write("{ X = " + samurai.getX() + ", Y = " + samurai.getY() + " }"
+						+ "\r\n");
 			}
 			for (final Chara dog : this.map.getAllDogs()) {
-				this.writer.write(this.map.isAvailable(dog.getX(), dog.getY())
-						+ ", ");
-				this.writer.write("{ X = " + dog.getX() + ", Y = " + dog.getY()
-						+ " }" + "\r\n");
+				this.writer.write(this.map.isAvailable(dog.getX(), dog.getY()) + ", ");
+				this.writer.write("{ X = " + dog.getX() + ", Y = " + dog.getY() + " }" + "\r\n");
 			}
 			this.writer.flush();
 		} catch (final IOException e) {
