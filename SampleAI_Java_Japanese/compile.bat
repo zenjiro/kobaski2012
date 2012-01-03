@@ -1,4 +1,5 @@
-del bin\jp\ac\waseda\cs\washi\samurai\api\*.class
-del bin\jp\ac\waseda\cs\washi\samurai\main\*.class
-mkdir bin
-javac -cp src -d bin src\jp\ac\waseda\cs\washi\samurai\main\*.java -encoding UTF-8
+del ..\zenjiro\target\classes\com\wordpress\zenjiro\samurai\*.class
+del ..\zenjiro\target\classes\jp\ac\waseda\cs\washi\samurai\api\*.class
+mkdir ..\zenjiro\target
+mkdir ..\zenjiro\target\classes
+javac -cp ..\zenjiro\src\main\java -d ..\zenjiro\target\classes ..\zenjiro\src\main\java\com\wordpress\zenjiro\samurai\*.java -encoding UTF-8
