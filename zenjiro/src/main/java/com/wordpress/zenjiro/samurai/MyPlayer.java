@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
 import jp.ac.waseda.cs.washi.samurai.api.CharaState;
@@ -75,6 +76,9 @@ public class MyPlayer {
 						.println(this.getDirection(nearestSmall.x, nearestSmall.y, distance.path));
 			} else {
 				System.out.println("NONE");
+				if (isKilled(this.map.getMySamurai().getX(), this.map.getMySamurai().getY())) {
+					Logger.getAnonymousLogger().info("ここに留まっていると死にます。" + this.map.getMySamurai());
+				}
 			}
 		} else {
 			// とりあえずプレイヤ1をひたすら追いかけさせる。
@@ -218,6 +222,23 @@ public class MyPlayer {
 			}
 		}
 		return direction;
+	}
+
+	/**
+	 * @param x x座標
+	 * @param y y座標
+	 * @return 指定した地点に行くと敵の犬に殺されるかどうか
+	 */
+	private boolean isKilled(int x, int y) {
+		for (Chara dog : this.map.getAllDogs()) {
+			if (dog != this.map.getMyDog()) {
+				if (Math.abs(dog.getX() - x) < 2 && Math.abs(dog.getY() - y) < 2
+						&& (dog.getX() == x || dog.getY() == y)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
