@@ -1,0 +1,41 @@
+/*
+ * YourPlayer.h
+ *
+ *  Created on: 2011/12/16
+ *      Author: Yasuyuki
+ */
+
+#ifndef YOURPLAYER_H_
+#define YOURPLAYER_H_
+
+#include "Map.h"
+#include <string>
+
+class YourPlayer {
+public:
+	YourPlayer() {
+		count = 0;
+	}
+	~YourPlayer() {	}
+
+	void run() {
+		Map map = Map::createMap();
+
+		if (count % 2 == 0) {
+			std::cout << getRandomAction() << endl;
+		} else {
+			std::cout << getRandomAction() << endl;
+		}
+
+		count++;
+	}
+
+private:
+	// returns random player action
+	string getRandomAction(void);
+
+	int count;
+};
+
+
+#endif /* YOURPLAYER_H_ */

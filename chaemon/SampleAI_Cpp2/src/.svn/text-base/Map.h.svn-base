@@ -1,0 +1,211 @@
+/*
+ * Map.h
+ */
+
+#ifndef MAP_H_
+#define MAP_H_
+
+#include <string>
+#include <iostream>
+#include <new>
+
+#include "Chara.h"
+
+using namespace std;
+
+#define CHARA_NUMBER 8
+#define SAMURAI_NUMBER 4
+#define DOG_NUMBER 4
+
+class Map {
+public:
+	enum BonusType {
+		/**
+		 * 何もない
+		 * Nothing
+		 */
+		NONE,
+		/**
+		 * 小ボーナス
+		 * Small Bonus
+		 */
+		SMALL,
+		/**
+		 * 大ボーナス
+		 * Big Bonus
+		 */
+		BIG,
+		/**
+		 * パワーアップボーナス
+		 * Power-up bonus
+		 */
+		SHOGUN,
+	};
+
+	~Map() {}
+
+	/**
+	 * ゲーム内の現在のマップを返します。このクラスから、ゲームに関する情報をすべて取得できます。
+	 * @return ゲーム内の現在のマップ
+	 */
+	/**
+	 * Return a current map in the game. All information related the game can be obtained from this class.
+	 * @ return A current map in the game
+	 */
+	static Map createMap(void);
+
+	/**
+	 * キャラクタの一覧を返します。
+	 * @return キャラクタの一覧
+	 */
+	/**
+	 * Return a list of charas.
+	 * @return A list of charas.
+	 */
+	Chara* getCharas(void);
+
+	/**
+	 * 侍の一覧を返します。
+	 * @return 侍の一覧
+	 */
+	/**
+	 * Return a list of samurais.
+	 * @return A list of samurais
+	 */
+	Chara* getSamurais(void);
+
+	/**
+	 * 犬の一覧を返します。
+	 * @return 犬の一覧
+	 */
+	/**
+	 * Return a list of dogs.
+	 * @return A list of dogs
+	 */
+	Chara* getDogs(void);
+
+	/**
+	 * 自分の侍を返します。
+	 * @return 自分の侍
+	 */
+	/**
+	 * Return my samurai.
+	 * @return My samurai
+	 */
+	Chara getMySamurai();
+
+	/**
+	 * 自分の犬を返します。
+	 * @return 自分の犬
+	 */
+	/**
+	 * Return my dog.
+	 * @return My dog
+	 */
+	Chara getMyDog();
+
+	/**
+	 * 指定された侍を返します。
+	 * @param index 侍を指定するインデックス
+	 * @return 指定された侍
+	 */
+	/**
+	 * Return a specified samurai.
+	 * @param index An index of corresponding samurai
+	 * @return A specified samurai
+	 */
+	Chara getSamurai(int index);
+
+	/**
+	 * 指定された犬を返します。
+	 * @param index 犬を指定するインデックス
+	 * @return 指定された犬
+	 */
+	/**
+	 * Return a specified dog.
+	 * @param index An index of corresponding dog
+	 * @return A specified dog
+	 */
+	Chara getDog(int index);
+
+	/**
+	 * 指定されたマスにあるボーナスを返します。
+	 * @param x x座標
+	 * @param y y座標
+	 * @return 指定されたマスにあるボーナスの種類
+	 */
+	/**
+	 * Return a bonus on the specified tile.
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @return A bonus on the specified tile
+	 */
+	BonusType getBonus(int x, int y);
+
+	/**
+	 * 指定されたマスが壁かどうかを返します。
+	 * @param x x座標
+	 * @param y y座標
+	 * @return 指定されたマスが壁である場合にはtrue, そうでない場合にはfalse
+	 */
+	/**
+	 * Return whether specified tile is wall or not.
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @return true when specified tile is wall, otherwise false
+	 */
+	bool isWall(int x, int y);
+
+	/**
+	 * 指定されたマスから、指定された方向に移動できるか判定します。
+	 * @param chara 移動可能かを判定するキャラクタ
+	 * @param d 移動可能かを判定する方向
+	 * @return 指定されたマスから、指定された方向に移動できる場合はtrue, そうでない場合はfalse
+	 */
+	/**
+	 * Return whether a specified character can move from current location to specified direction.
+	 * @param chara Corresponding chara
+	 * @param d Corresponding direction
+	 * @return true when a specified character could move from current location to specified direction, otherwise false
+	 */
+	bool isMovable(Chara chara, Chara::Direction d);
+
+	/**
+	 * 指定された座標が有効かどうかを返します。
+	 * @param x x座標
+	 * @param y y座標
+	 * @return 指定された座標が有効な場合はtrue, そうでない場合はfalse
+	 */
+	/**
+	 * Return whether specified coordinate is valid tile.
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @return true when specified coordinate is valid tile, otherwise false
+	 */
+	bool isAvailable(int x, int y);
+
+	/**
+	 * ゲームの残り時間を返します。
+	 * @return ゲームの残り時間
+	 */
+	/**
+	 * Return remaining time in the game.
+	 * @return Remaining time in the game
+	 */
+	int getRemainingTime(void);
+
+private:
+	Map() {}
+
+	int index;
+	int remainingTime;
+	int width;
+	int height;
+
+	char** mapData;
+	Chara charas[8];
+	Chara samurais[4];
+	Chara dogs[4];
+};
+
+#endif /* MAP_H_ */
