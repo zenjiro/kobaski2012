@@ -76,12 +76,13 @@ public class MyPlayer {
 			} else if (nearestSmall != null) {
 				direction = this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
 			}
-			if (isKilled(this.map.getMySamurai().getX() + direction.dx, this.map.getMySamurai()
-					.getY() + direction.dy)) {
+			if (this.map.getMySamurai().getState() == CharaState.NORMAL
+					&& isKilled(this.map.getMySamurai().getX() + direction.dx, this.map
+							.getMySamurai().getY() + direction.dy)) {
 				Direction safeDirection = getSafeDirection(this.map.getMySamurai());
 				System.out.println(safeDirection);
-				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、死ぬのを避けるために{1}に動きました。{2}",
-						new Object[] { direction, safeDirection, this.map.getMySamurai() });
+				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、死ぬのを避けるために{1}に動きました。",
+						new Object[] { direction, safeDirection });
 			} else {
 				System.out.println(direction);
 			}
