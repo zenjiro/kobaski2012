@@ -76,8 +76,9 @@ public class MyPlayer {
 						.println(this.getDirection(nearestSmall.x, nearestSmall.y, distance.path));
 			} else {
 				if (isKilled(this.map.getMySamurai().getX(), this.map.getMySamurai().getY())) {
-					Logger.getAnonymousLogger().info("ここに留まっていると死にます。" + this.map.getMySamurai());
 					System.out.println(getSafeDirection(this.map.getMySamurai()));
+					Logger.getAnonymousLogger().info(
+							"ここに留まっていると死ぬので逃げました。" + this.map.getMySamurai());
 				} else {
 					System.out.println("NONE");
 				}
