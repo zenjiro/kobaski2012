@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jp.ac.waseda.cs.washi.samurai.api.Chara;
@@ -69,19 +70,20 @@ public class MyPlayer {
 					}
 				}
 			}
+			Direction direction = Direction.NONE;
 			if (nearestBig != null) {
-				System.out.println(this.getDirection(nearestBig.x, nearestBig.y, distance.path));
+				direction = this.getDirection(nearestBig.x, nearestBig.y, distance.path);
 			} else if (nearestSmall != null) {
-				System.out
-						.println(this.getDirection(nearestSmall.x, nearestSmall.y, distance.path));
+				direction = this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
+			}
+			if (isKilled(this.map.getMySamurai().getX() + direction.dx, this.map.getMySamurai()
+					.getY() + direction.dy)) {
+				Direction safeDirection = getSafeDirection(this.map.getMySamurai());
+				System.out.println(safeDirection);
+				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、死ぬのを避けるために{1}に動きました。{2}",
+						new Object[] { direction, safeDirection, this.map.getMySamurai() });
 			} else {
-				if (isKilled(this.map.getMySamurai().getX(), this.map.getMySamurai().getY())) {
-					System.out.println(getSafeDirection(this.map.getMySamurai()));
-					Logger.getAnonymousLogger().info(
-							"ここに留まっていると死ぬので逃げました。" + this.map.getMySamurai());
-				} else {
-					System.out.println("NONE");
-				}
+				System.out.println(direction);
 			}
 		} else {
 			// とりあえずプレイヤ1をひたすら追いかけさせる。
