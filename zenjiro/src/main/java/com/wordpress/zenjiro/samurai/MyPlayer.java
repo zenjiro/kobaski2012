@@ -81,7 +81,7 @@ public class MyPlayer {
 							.getMySamurai().getY() + direction.dy)) {
 				Direction safeDirection = getSafeDirection(this.map.getMySamurai());
 				System.out.println(safeDirection);
-				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、死ぬのを避けるために{1}に動きました。",
+				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
 						new Object[] { direction, safeDirection });
 			} else {
 				System.out.println(direction);
