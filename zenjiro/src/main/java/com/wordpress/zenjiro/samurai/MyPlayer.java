@@ -54,15 +54,17 @@ public class MyPlayer implements Player {
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
 	private Distance getDistance(final Chara chara, final boolean hateDogs, final Map map) {
-		final int[][] distance = new int[map.getHeight()][map.getWidth()];
-		final Direction[][] path = new Direction[map.getHeight()][map.getWidth()];
-		final boolean[][] dogs = new boolean[map.getHeight()][map.getWidth()];
-		for (int i = 0; i < map.getHeight(); i++) {
-			distance[i] = new int[map.getWidth()];
+		final int width = map.getWidth();
+		final int height = map.getHeight();
+		final int[][] distance = new int[height][width];
+		final Direction[][] path = new Direction[height][width];
+		final boolean[][] dogs = new boolean[height][width];
+		for (int i = 0; i < height; i++) {
+			distance[i] = new int[width];
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
-			path[i] = new Direction[map.getWidth()];
+			path[i] = new Direction[width];
 			Arrays.fill(path[i], Direction.NONE);
-			dogs[i] = new boolean[map.getWidth()];
+			dogs[i] = new boolean[width];
 		}
 		if (hateDogs) {
 			for (final Chara dog : map.getAllDogs()) {
