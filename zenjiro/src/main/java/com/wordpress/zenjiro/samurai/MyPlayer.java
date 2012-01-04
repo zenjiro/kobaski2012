@@ -77,46 +77,6 @@ public class MyPlayer implements Player {
 	}
 
 	/**
-	 * @param map マップ
-	 * @param distance 各地点への距離
-	 * @return 最寄のボーナスへ向かう方向
-	 */
-	public Direction getNearestBonulDirection(final Map map, final Distance distance) {
-		Point nearestBig = null;
-		Point nearestSmall = null;
-		int minBigDistance = Integer.MAX_VALUE;
-		int minSmallDistance = Integer.MAX_VALUE;
-		for (int i = 0; i < map.getHeight(); i++) {
-			for (int j = 0; j < map.getWidth(); j++) {
-				switch (map.getBonus(j, i)) {
-				case SHOGUN:
-				case BIG:
-					if (distance.distance[i][j] < minBigDistance) {
-						nearestBig = new Point(j, i);
-						minBigDistance = distance.distance[i][j];
-					}
-					break;
-				case SMALL:
-					if (distance.distance[i][j] < minSmallDistance) {
-						nearestSmall = new Point(j, i);
-						minSmallDistance = distance.distance[i][j];
-					}
-					break;
-				case NONE:
-					break;
-				}
-			}
-		}
-		if (nearestBig != null) {
-			return this.getDirection(nearestBig.x, nearestBig.y, distance.path);
-		} else if (nearestSmall != null) {
-			return this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
-		} else {
-			return Direction.UNKNOWN;
-		}
-	}
-
-	/**
 	 * @param x 目的地のx座標
 	 * @param y 目的地のy座標
 	 * @param path 各地点への最短経路
@@ -161,6 +121,46 @@ public class MyPlayer implements Player {
 		distance[chara.getY()][chara.getX()] = 0;
 		search(chara.getX(), chara.getY(), distance, path, dogs, map);
 		return new Distance(distance, path);
+	}
+
+	/**
+	 * @param map マップ
+	 * @param distance 各地点への距離
+	 * @return 最寄のボーナスへ向かう方向
+	 */
+	public Direction getNearestBonulDirection(final Map map, final Distance distance) {
+		Point nearestBig = null;
+		Point nearestSmall = null;
+		int minBigDistance = Integer.MAX_VALUE;
+		int minSmallDistance = Integer.MAX_VALUE;
+		for (int i = 0; i < map.getHeight(); i++) {
+			for (int j = 0; j < map.getWidth(); j++) {
+				switch (map.getBonus(j, i)) {
+				case SHOGUN:
+				case BIG:
+					if (distance.distance[i][j] < minBigDistance) {
+						nearestBig = new Point(j, i);
+						minBigDistance = distance.distance[i][j];
+					}
+					break;
+				case SMALL:
+					if (distance.distance[i][j] < minSmallDistance) {
+						nearestSmall = new Point(j, i);
+						minSmallDistance = distance.distance[i][j];
+					}
+					break;
+				case NONE:
+					break;
+				}
+			}
+		}
+		if (nearestBig != null) {
+			return this.getDirection(nearestBig.x, nearestBig.y, distance.path);
+		} else if (nearestSmall != null) {
+			return this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
+		} else {
+			return Direction.UNKNOWN;
+		}
 	}
 
 	/**
