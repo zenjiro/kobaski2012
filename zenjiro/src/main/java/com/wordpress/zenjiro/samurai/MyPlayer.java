@@ -226,22 +226,21 @@ public class MyPlayer implements Player {
 					&& isKilled(map.getMySamurai().getX() + direction.dx, map.getMySamurai().getY()
 							+ direction.dy, map)) {
 				final Direction safeDirection = getSafeDirection(map.getMySamurai(), map);
-				System.out.println(safeDirection);
 				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
 						new Object[] { direction, safeDirection });
+				return safeDirection;
 			} else {
-				System.out.println(direction);
+				return direction;
 			}
 		} else {
 			// とりあえずプレイヤ1をひたすら追いかけさせる。
 			final Distance distance = this.getDistance(map.getMyDog(), false, map);
 			final Chara target = map.getSamurai(1);
 			if (target.getState() != CharaState.INVISIBLE) {
-				System.out.println(this.getDirection(target.getX(), target.getY(), distance.path));
+				return this.getDirection(target.getX(), target.getY(), distance.path);
 			} else {
-				System.out.println("NONE");
+				return Direction.NONE;
 			}
 		}
-		return null;
 	}
 }
