@@ -2,7 +2,6 @@ package com.wordpress.zenjiro.samurai;
 
 import java.awt.Point;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,79 +18,6 @@ public class MyPlayer implements Player {
 	 * マップ
 	 */
 	private Map map;
-	/**
-	 * 侍の番かどうか
-	 */
-	private boolean isSamurai;
-
-	/**
-	 * 自分の番の時に呼び出されます。
-	 * @param sc スキャナ
-	 */
-	public void run(final Scanner sc) {
-		this.map = Map.createOrUpdateMap(this.map, sc);
-		if (this.isSamurai) {
-			final Distance distance = this.getDistance(this.map.getMySamurai(), this.map
-					.getMySamurai().getState() != CharaState.SHOGUN);
-			// 最寄りのボーナスを追いかける。
-			Point nearestBig = null;
-			Point nearestSmall = null;
-			int minBigDistance = Integer.MAX_VALUE;
-			int minSmallDistance = Integer.MAX_VALUE;
-			for (int i = 0; i < this.map.getHeight(); i++) {
-				for (int j = 0; j < this.map.getWidth(); j++) {
-					switch (this.map.getBonus(j, i)) {
-					case SHOGUN:
-						if (distance.distance[i][j] < minBigDistance) {
-							nearestBig = new Point(j, i);
-							minBigDistance = distance.distance[i][j];
-						}
-						break;
-					case BIG:
-						if (distance.distance[i][j] < minBigDistance) {
-							nearestBig = new Point(j, i);
-							minBigDistance = distance.distance[i][j];
-						}
-						break;
-					case SMALL:
-						if (distance.distance[i][j] < minSmallDistance) {
-							nearestSmall = new Point(j, i);
-							minSmallDistance = distance.distance[i][j];
-						}
-						break;
-					case NONE:
-						break;
-					}
-				}
-			}
-			Direction direction = Direction.NONE;
-			if (nearestBig != null) {
-				direction = this.getDirection(nearestBig.x, nearestBig.y, distance.path);
-			} else if (nearestSmall != null) {
-				direction = this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
-			}
-			if (this.map.getMySamurai().getState() == CharaState.NORMAL
-					&& isKilled(this.map.getMySamurai().getX() + direction.dx, this.map
-							.getMySamurai().getY() + direction.dy)) {
-				final Direction safeDirection = getSafeDirection(this.map.getMySamurai());
-				System.out.println(safeDirection);
-				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
-						new Object[] { direction, safeDirection });
-			} else {
-				System.out.println(direction);
-			}
-		} else {
-			// とりあえずプレイヤ1をひたすら追いかけさせる。
-			final Distance distance = this.getDistance(this.map.getMyDog(), false);
-			final Chara target = this.map.getSamurai(1);
-			if (target.getState() != CharaState.INVISIBLE) {
-				System.out.println(this.getDirection(target.getX(), target.getY(), distance.path));
-			} else {
-				System.out.println("NONE");
-			}
-		}
-		this.isSamurai = !this.isSamurai;
-	}
 
 	/**
 	 * 各地点への最短距離と経路
@@ -255,16 +181,69 @@ public class MyPlayer implements Player {
 		return Direction.NONE;
 	}
 
-	/**
-	 * コンストラクタ
-	 */
-	public MyPlayer() {
-		this.isSamurai = true;
-	}
-
 	@Override
 	public Direction calc(final Map map, final boolean isSamurai) {
-		// TODO 実装
+		this.map = map;
+		if (isSamurai) {
+			final Distance distance = this.getDistance(this.map.getMySamurai(), this.map
+					.getMySamurai().getState() != CharaState.SHOGUN);
+			// 最寄りのボーナスを追いかける。
+			Point nearestBig = null;
+			Point nearestSmall = null;
+			int minBigDistance = Integer.MAX_VALUE;
+			int minSmallDistance = Integer.MAX_VALUE;
+			for (int i = 0; i < this.map.getHeight(); i++) {
+				for (int j = 0; j < this.map.getWidth(); j++) {
+					switch (this.map.getBonus(j, i)) {
+					case SHOGUN:
+						if (distance.distance[i][j] < minBigDistance) {
+							nearestBig = new Point(j, i);
+							minBigDistance = distance.distance[i][j];
+						}
+						break;
+					case BIG:
+						if (distance.distance[i][j] < minBigDistance) {
+							nearestBig = new Point(j, i);
+							minBigDistance = distance.distance[i][j];
+						}
+						break;
+					case SMALL:
+						if (distance.distance[i][j] < minSmallDistance) {
+							nearestSmall = new Point(j, i);
+							minSmallDistance = distance.distance[i][j];
+						}
+						break;
+					case NONE:
+						break;
+					}
+				}
+			}
+			Direction direction = Direction.NONE;
+			if (nearestBig != null) {
+				direction = this.getDirection(nearestBig.x, nearestBig.y, distance.path);
+			} else if (nearestSmall != null) {
+				direction = this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
+			}
+			if (this.map.getMySamurai().getState() == CharaState.NORMAL
+					&& isKilled(this.map.getMySamurai().getX() + direction.dx, this.map
+							.getMySamurai().getY() + direction.dy)) {
+				final Direction safeDirection = getSafeDirection(this.map.getMySamurai());
+				System.out.println(safeDirection);
+				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
+						new Object[] { direction, safeDirection });
+			} else {
+				System.out.println(direction);
+			}
+		} else {
+			// とりあえずプレイヤ1をひたすら追いかけさせる。
+			final Distance distance = this.getDistance(this.map.getMyDog(), false);
+			final Chara target = this.map.getSamurai(1);
+			if (target.getState() != CharaState.INVISIBLE) {
+				System.out.println(this.getDirection(target.getX(), target.getY(), distance.path));
+			} else {
+				System.out.println("NONE");
+			}
+		}
 		return null;
 	}
 }
