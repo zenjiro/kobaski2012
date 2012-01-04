@@ -122,27 +122,10 @@ public class MyPlayer implements Player {
 	 */
 	private Direction getDirection(int x, int y, final Direction[][] path) {
 		Direction direction = Direction.NONE;
-		loop: while (true) {
-			switch (path[y][x]) {
-			case DOWN:
-				direction = path[y][x];
-				y--;
-				break;
-			case RIGHT:
-				direction = path[y][x];
-				x--;
-				break;
-			case UP:
-				direction = path[y][x];
-				y++;
-				break;
-			case LEFT:
-				direction = path[y][x];
-				x++;
-				break;
-			case NONE:
-				break loop;
-			}
+		while (path[y][x] != Direction.NONE) {
+			direction = path[y][x];
+			x += direction.dx;
+			y += direction.dy;
 		}
 		return direction;
 	}
