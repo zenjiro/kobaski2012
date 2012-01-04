@@ -90,13 +90,13 @@ public class MyPlayer implements Player {
 		final int d = distance[y][x] + 1;
 		for (final Direction direction : Direction.values()) {
 			if (direction != Direction.NONE) {
-				if (map.isAvailable(x + direction.dx, y + direction.dy)
-						&& !map.isWall(x + direction.dx, y + direction.dy)
-						&& !dogs[y + direction.dy][x + direction.dx]
-						&& d < distance[y + direction.dy][x + direction.dx]) {
-					distance[y + direction.dy][x + direction.dx] = d;
-					path[y + direction.dy][x + direction.dx] = direction;
-					this.search(x + direction.dx, y + direction.dy, distance, path, dogs, map);
+				final int dx = direction.dx;
+				final int dy = direction.dy;
+				if (map.isAvailable(x + dx, y + dy) && !map.isWall(x + dx, y + dy)
+						&& !dogs[y + dy][x + dx] && d < distance[y + dy][x + dx]) {
+					distance[y + dy][x + dx] = d;
+					path[y + dy][x + dx] = direction;
+					this.search(x + dx, y + dy, distance, path, dogs, map);
 				}
 			}
 		}
