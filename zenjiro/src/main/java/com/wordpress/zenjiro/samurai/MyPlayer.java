@@ -61,11 +61,6 @@ public class MyPlayer implements Player {
 				for (int j = 0; j < map.getWidth(); j++) {
 					switch (map.getBonus(j, i)) {
 					case SHOGUN:
-						if (distance.distance[i][j] < minBigDistance) {
-							nearestBig = new Point(j, i);
-							minBigDistance = distance.distance[i][j];
-						}
-						break;
 					case BIG:
 						if (distance.distance[i][j] < minBigDistance) {
 							nearestBig = new Point(j, i);
