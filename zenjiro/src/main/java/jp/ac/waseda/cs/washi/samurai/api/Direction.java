@@ -25,7 +25,7 @@ public enum Direction {
 	/**
 	 * 不可視状態のため方向不明
 	 */
-	NONE(0, 0), ;
+	UNKNOWN(0, 0), ;
 
 	public final int dx;
 	public final int dy;

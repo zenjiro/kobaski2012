@@ -71,7 +71,7 @@ public class MyPlayer implements Player {
 			if (target.getState() != CharaState.INVISIBLE) {
 				return this.getDirection(target.getX(), target.getY(), distance.path);
 			} else {
-				return Direction.NONE;
+				return Direction.UNKNOWN;
 			}
 		}
 	}
@@ -112,7 +112,7 @@ public class MyPlayer implements Player {
 		} else if (nearestSmall != null) {
 			return this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
 		} else {
-			return Direction.NONE;
+			return Direction.UNKNOWN;
 		}
 	}
 
@@ -123,8 +123,8 @@ public class MyPlayer implements Player {
 	 * @return 指定した地点へ向かうパスの最初の方向
 	 */
 	private Direction getDirection(int x, int y, final Direction[][] path) {
-		Direction direction = Direction.NONE;
-		while (path[y][x] != Direction.NONE) {
+		Direction direction = Direction.UNKNOWN;
+		while (path[y][x] != Direction.UNKNOWN) {
 			direction = path[y][x];
 			x -= direction.dx;
 			y -= direction.dy;
@@ -148,7 +148,7 @@ public class MyPlayer implements Player {
 			distance[i] = new int[width];
 			Arrays.fill(distance[i], Integer.MAX_VALUE);
 			path[i] = new Direction[width];
-			Arrays.fill(path[i], Direction.NONE);
+			Arrays.fill(path[i], Direction.UNKNOWN);
 			dogs[i] = new boolean[width];
 		}
 		if (hateDogs) {
@@ -175,7 +175,7 @@ public class MyPlayer implements Player {
 				return direction;
 			}
 		}
-		return Direction.NONE;
+		return Direction.UNKNOWN;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class MyPlayer implements Player {
 			final boolean[][] dogs, final Map map) {
 		final int d = distance[y][x] + 1;
 		for (final Direction direction : Direction.values()) {
-			if (direction != Direction.NONE) {
+			if (direction != Direction.UNKNOWN) {
 				final int dx = direction.dx;
 				final int dy = direction.dy;
 				if (map.isAvailable(x + dx, y + dy) && !map.isWall(x + dx, y + dy)
