@@ -107,13 +107,13 @@ public class MyPlayer implements Player {
 				}
 			}
 		}
-		Direction direction = Direction.NONE;
-		final Point nearestBonus = nearestBig != null ? nearestBig
-				: (nearestSmall != null ? nearestSmall : null);
-		if (nearestBonus != null) {
-			direction = this.getDirection(nearestBonus.x, nearestBonus.y, distance.path);
+		if (nearestBig != null) {
+			return this.getDirection(nearestBig.x, nearestBig.y, distance.path);
+		} else if (nearestSmall != null) {
+			return this.getDirection(nearestSmall.x, nearestSmall.y, distance.path);
+		} else {
+			return Direction.NONE;
 		}
-		return direction;
 	}
 
 	/**
