@@ -124,8 +124,8 @@ public class MyPlayer implements Player {
 		Direction direction = Direction.NONE;
 		while (path[y][x] != Direction.NONE) {
 			direction = path[y][x];
-			x += direction.dx;
-			y += direction.dy;
+			x -= direction.dx;
+			y -= direction.dy;
 		}
 		return direction;
 	}
