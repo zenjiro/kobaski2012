@@ -88,29 +88,17 @@ public class MyPlayer implements Player {
 	private void search(final int x, final int y, final int[][] distance, final Direction[][] path,
 			final boolean[][] dogs, final Map map) {
 		final int d = distance[y][x] + 1;
-		if (map.isAvailable(x, y + 1) && !map.isWall(x, y + 1) && !dogs[y + 1][x]
-				&& d < distance[y + 1][x]) {
-			distance[y + 1][x] = d;
-			path[y + 1][x] = Direction.DOWN;
-			this.search(x, y + 1, distance, path, dogs, map);
-		}
-		if (map.isAvailable(x + 1, y) && !map.isWall(x + 1, y) && !dogs[y][x + 1]
-				&& d < distance[y][x + 1]) {
-			distance[y][x + 1] = d;
-			path[y][x + 1] = Direction.RIGHT;
-			this.search(x + 1, y, distance, path, dogs, map);
-		}
-		if (map.isAvailable(x, y - 1) && !map.isWall(x, y - 1) && !dogs[y - 1][x]
-				&& d < distance[y - 1][x]) {
-			distance[y - 1][x] = d;
-			path[y - 1][x] = Direction.UP;
-			this.search(x, y - 1, distance, path, dogs, map);
-		}
-		if (map.isAvailable(x - 1, y) && !map.isWall(x - 1, y) && !dogs[y][x - 1]
-				&& d < distance[y][x - 1]) {
-			distance[y][x - 1] = d;
-			path[y][x - 1] = Direction.LEFT;
-			this.search(x - 1, y, distance, path, dogs, map);
+		for (final Direction direction : Direction.values()) {
+			if (direction != Direction.NONE) {
+				if (map.isAvailable(x + direction.dx, y + direction.dy)
+						&& !map.isWall(x + direction.dx, y + direction.dy)
+						&& !dogs[y + direction.dy][x + direction.dx]
+						&& d < distance[y + direction.dy][x + direction.dx]) {
+					distance[y + direction.dy][x + direction.dx] = d;
+					path[y + direction.dy][x + direction.dx] = direction;
+					this.search(x + direction.dx, y + direction.dy, distance, path, dogs, map);
+				}
+			}
 		}
 	}
 
@@ -153,7 +141,7 @@ public class MyPlayer implements Player {
 	 * @param map マップ
 	 * @return 安全な向き
 	 */
-	private Direction getSafeDirection(final Chara chara, Map map) {
+	private Direction getSafeDirection(final Chara chara, final Map map) {
 		for (final Direction direction : new Direction[] { Direction.DOWN, Direction.RIGHT,
 				Direction.UP, Direction.LEFT }) {
 			if (!isKilled(chara.getX() + direction.dx, chara.getY() + direction.dy, map)) {
