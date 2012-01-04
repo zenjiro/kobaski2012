@@ -19,7 +19,7 @@ public class Main {
 		final Player player = new MyPlayer();
 		while (true) {
 			map = Map.createOrUpdateMap(map, scanner);
-			System.out.println(player.calc(map, isSamurai));
+			System.out.println(player.calc(map, isSamurai).toString().replace("UNKNOWN", "NONE"));
 			isSamurai = !isSamurai;
 		}
 	}
