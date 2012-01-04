@@ -14,7 +14,7 @@ import jp.ac.waseda.cs.washi.samurai.api.Map;
 /**
  * プレイヤの実装
  */
-public class MyPlayer {
+public class MyPlayer implements Player {
 	/**
 	 * マップ
 	 */
@@ -73,7 +73,7 @@ public class MyPlayer {
 			if (this.map.getMySamurai().getState() == CharaState.NORMAL
 					&& isKilled(this.map.getMySamurai().getX() + direction.dx, this.map
 							.getMySamurai().getY() + direction.dy)) {
-				Direction safeDirection = getSafeDirection(this.map.getMySamurai());
+				final Direction safeDirection = getSafeDirection(this.map.getMySamurai());
 				System.out.println(safeDirection);
 				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
 						new Object[] { direction, safeDirection });
@@ -131,7 +131,7 @@ public class MyPlayer {
 	 * @param hateDogs 敵の犬を避けるかどうか
 	 * @return 指定したCharaから各地点への最短距離と経路
 	 */
-	private Distance getDistance(final Chara chara, boolean hateDogs) {
+	private Distance getDistance(final Chara chara, final boolean hateDogs) {
 		final int[][] distance = new int[this.map.getHeight()][this.map.getWidth()];
 		final Direction[][] path = new Direction[this.map.getHeight()][this.map.getWidth()];
 		final boolean[][] dogs = new boolean[this.map.getHeight()][this.map.getWidth()];
@@ -143,7 +143,7 @@ public class MyPlayer {
 			dogs[i] = new boolean[this.map.getWidth()];
 		}
 		if (hateDogs) {
-			for (Chara dog : this.map.getAllDogs()) {
+			for (final Chara dog : this.map.getAllDogs()) {
 				if (dog != this.map.getMyDog()) {
 					dogs[dog.getY()][dog.getX()] = true;
 				}
@@ -163,7 +163,7 @@ public class MyPlayer {
 	 * @param dogs 敵の犬の座標
 	 */
 	private void search(final int x, final int y, final int[][] distance, final Direction[][] path,
-			boolean[][] dogs) {
+			final boolean[][] dogs) {
 		final int d = distance[y][x] + 1;
 		if (this.map.isAvailable(x, y + 1) && !this.map.isWall(x, y + 1) && !dogs[y + 1][x]
 				&& d < distance[y + 1][x]) {
@@ -229,8 +229,8 @@ public class MyPlayer {
 	 * @param y y座標
 	 * @return 指定した地点に行くと敵の犬に殺されるかどうか
 	 */
-	private boolean isKilled(int x, int y) {
-		for (Chara dog : this.map.getAllDogs()) {
+	private boolean isKilled(final int x, final int y) {
+		for (final Chara dog : this.map.getAllDogs()) {
 			if (dog != this.map.getMyDog()) {
 				if (Math.abs(dog.getX() - x) < 2 && Math.abs(dog.getY() - y) < 2
 						&& (dog.getX() == x || dog.getY() == y)) {
@@ -245,9 +245,9 @@ public class MyPlayer {
 	 * @param chara キャラ
 	 * @return 安全な向き
 	 */
-	private Direction getSafeDirection(Chara chara) {
-		for (Direction direction : new Direction[] { Direction.DOWN, Direction.RIGHT, Direction.UP,
-				Direction.LEFT }) {
+	private Direction getSafeDirection(final Chara chara) {
+		for (final Direction direction : new Direction[] { Direction.DOWN, Direction.RIGHT,
+				Direction.UP, Direction.LEFT }) {
 			if (!isKilled(chara.getX() + direction.dx, chara.getY() + direction.dy)) {
 				return direction;
 			}
@@ -260,5 +260,11 @@ public class MyPlayer {
 	 */
 	public MyPlayer() {
 		this.isSamurai = true;
+	}
+
+	@Override
+	public Direction calc(final Map map, final boolean isSamurai) {
+		// TODO 実装
+		return null;
 	}
 }
