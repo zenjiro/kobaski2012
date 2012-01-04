@@ -50,14 +50,14 @@ public class MyPlayer implements Player {
 	@Override
 	public Direction calc(final Map map, final boolean isSamurai) {
 		if (isSamurai) {
-			final Distance distance = this.getDistance(map.getMySamurai(), map.getMySamurai()
-					.getState() != CharaState.SHOGUN, map);
+			final Chara samurai = map.getMySamurai();
+			final Distance distance = this.getDistance(samurai,
+					samurai.getState() != CharaState.SHOGUN, map);
 			// 最寄りのボーナスを追いかける。
 			final Direction direction = getNearestBonulDirection(map, distance);
-			if (map.getMySamurai().getState() == CharaState.NORMAL
-					&& isKilled(map.getMySamurai().getX() + direction.dx, map.getMySamurai().getY()
-							+ direction.dy, map)) {
-				final Direction safeDirection = getSafeDirection(map.getMySamurai(), map);
+			if (samurai.getState() == CharaState.NORMAL
+					&& isKilled(samurai.getX() + direction.dx, samurai.getY() + direction.dy, map)) {
+				final Direction safeDirection = getSafeDirection(samurai, map);
 				Logger.getAnonymousLogger().log(Level.INFO, "{0}に動く予定でしたが、敵の犬を避けるために{1}に動きました。",
 						new Object[] { direction, safeDirection });
 				return safeDirection;
