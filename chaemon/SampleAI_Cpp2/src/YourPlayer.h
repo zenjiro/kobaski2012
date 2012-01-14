@@ -15,6 +15,10 @@
 
 using namespace std;
 
+const int M=32;
+
+void calc(const bool &);
+
 class YourPlayer {
 public:
 //	ofstream logfile;
@@ -39,11 +43,8 @@ public:
 //private:
 	// returns random player action
 //	string getRandomAction(void);
-	void calc(const bool &);
-	void read(ofstream &);
 	int count;
-	void calcDist(int,int,const bool &);
-	string calcDir(const bool &);
+//	void calcDist(int,int,const bool &,int [M][M],int [M][M]);
 };
 
 
