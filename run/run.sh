@@ -1,0 +1,2 @@
+java -jar SamuraiCoding2011-2.0.6.jar  "../chaemon/ai.out" "../chaemon/ai.out" "../chaemon/ai.out" "java -cp ../zenjiro/target/classes com.wordpress.zenjiro.samurai.Main"
+#java -jar SamuraiCoding2011-2.0.6.jar  "./chaemon/SampleAI_Cpp2/ai.out" "./chaemon/SampleAI_Cpp2/ai.out" "java -cp ./zenjiro/target/classes com.wordpress.zenjiro.samurai.Main" "java -cp ./zenjiro/target/classes com.wordpress.zenjiro.samurai.Main"
