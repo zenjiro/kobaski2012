@@ -1,0 +1,214 @@
+/*
+ * Map.cpp
+ */
+
+#include "Map.h"
+
+Map Map::createMap(void) {
+	Map map;
+
+	// パラメータの読み込み
+	cin >> map.remainingTime;
+	cin >> map.index;
+	cin >> map.width;
+	cin >> map.height;
+
+	string line;
+
+	map.mapData = new char*[map.height];
+	for (int i = 0; i < map.height; i++) {
+		map.mapData[i] = new char[map.width];
+	}
+
+	getline(cin, line);
+
+	// マップ情報の読み込み
+	for (int i = 0; i < map.height; i++) {
+		getline(cin, line);
+		for (int j = 0; j < map.width; j++) {
+			map.mapData[i][j] = line.at(j);
+		}
+	}
+
+	// キャラクタ情報の読み込み
+	for (int i = 0; i < 4; i++) {
+		int score;
+		int x;
+		int y;
+		Chara::Direction direction;
+		Chara::CharaState state;
+		int stateRemainingTime;
+
+		// 侍情報の読み込み
+		string directionS;
+		string stateS;
+
+		cin >> score;
+		cin >> x;
+		cin >> y;
+
+		cin >> directionS;
+		if (directionS == "RIGHT") {
+			direction = Chara::RIGHT;
+		} else if (directionS == "UP") {
+			direction = Chara::UP;
+		} else if (directionS == "LEFT") {
+			direction = Chara::LEFT;
+		} else if (directionS == "DOWN") {
+			direction = Chara::DOWN;
+		} else {
+			direction = Chara::UNKNOWN;
+		}
+
+		cin >> stateS;
+		if (stateS == "NORMAL") {
+			state = Chara::NORMAL;
+		} else if (stateS == "INVISIBLE") {
+			state = Chara::INVISIBLE;
+		} else if (stateS == "SHOGUN") {
+			state = Chara::SHOGUN;
+		}
+
+		cin >> stateRemainingTime;
+
+		map.charas[i * 2].initializeChara(Chara::SAMURAI, score, x, y,
+				direction, state, stateRemainingTime);
+		map.samurais[i] = map.charas[i * 2];
+
+		// 犬情報の読み込み
+		string directionD;
+
+		cin >> score;
+		cin >> x;
+		cin >> y;
+
+		cin >> directionD;
+		if (directionD == "RIGHT") {
+			direction = Chara::RIGHT;
+		} else if (directionD == "UP") {
+			direction = Chara::UP;
+		} else if (directionD == "LEFT") {
+			direction = Chara::LEFT;
+		} else if (directionD == "DOWN") {
+			direction = Chara::DOWN;
+		} else {
+			direction = Chara::UNKNOWN;
+		}
+
+		map.charas[i * 2 + 1].initializeChara(Chara::DOG, score, x, y, direction);
+		map.dogs[i] = map.charas[i * 2 + 1];
+	}
+
+	return map;
+}
+
+Chara* Map::getCharas(void) {
+	return charas;
+}
+
+Chara* Map::getSamurais(void) {
+	return samurais;
+}
+
+Chara* Map::getDogs(void) {
+	return dogs;
+}
+
+Chara Map::getMySamurai(void) {
+	return samurais[index];
+}
+
+Chara Map::getMyDog(void) {
+	return dogs[index];
+}
+
+Chara Map::getSamurai(int index) {
+	return samurais[index];
+}
+
+Chara Map::getDog(int index) {
+	return dogs[index];
+}
+
+Map::BonusType Map::getBonus(int x, int y) {
+	switch (mapData[x][y]) {
+	case 's': // 小ボーナス
+		return Map::SMALL;
+	case 'b': // 大ボーナス
+		return Map::BIG;
+	case 'p': // 将軍ボーナス
+		return Map::SHOGUN;
+	default:
+		return Map::NONE;
+	}
+}
+
+bool Map::isWall(int x, int y) {
+	if (mapData[x][y] == '*') {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Map::isMovable(Chara chara, Chara::Direction d) {
+	// キャラクタのタイプ（侍 or 犬）
+	Chara::CharaType charaType = chara.getType();
+
+	// キャラクタの移動したい座標
+	int x = chara.getX();
+	int y = chara.getY();
+
+	switch (d) {
+	case Chara::RIGHT:
+		x++;
+		break;
+	case Chara::UP:
+		y--;
+		break;
+	case Chara::LEFT:
+		x--;
+		break;
+	case Chara::DOWN:
+		y++;
+		break;
+	default:
+		break;
+	}
+
+	// 移動できないときは以下のとき
+	// 1. 移動したい場所が壁のとき
+	if (isWall(x, y)) {
+		cout << "It's wall!" << endl;
+		return false;
+	}
+	// 2. キャラクタが侍で、移動したい場所に相手の侍がいるとき
+	if (charaType == Chara::SAMURAI) {
+		for (int i = 0; i < 4; i++) {
+			if (samurais[i].getX() == x && samurais[i].getY() == y) {
+				cout << "Come Across with Anothter Samurai!" << endl;
+				return false;
+			}
+		}
+	}
+	// 3. キャラクタが犬で、移動したい場所に相手の犬がいるとき
+	if (charaType == Chara::DOG) {
+		for (int i = 0; i < 4; i++) {
+			if (dogs[i].getX() == x && dogs[i].getY() == y) {
+				cout << "Anothter Dogs Here!" << endl;
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool Map::isAvailable(int x, int y) {
+	return x > -1 && x < width && y > -1 && y < height;
+}
+
+int Map::getRemainingTime(void) {
+	return remainingTime;
+}
+
