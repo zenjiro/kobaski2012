@@ -30,6 +30,7 @@ int remainingTime=-1,index=-1;
 bool safeDog,adjDog;//味方犬と一緒にいるか、隣に敵犬がいるか
 int state[4],staterem[4];
 int samsc[4],dogsc[4],samdir[4],dogdir[4];
+int rank[4];
 int sam[4][2],dog[4][2];
 int nearDog;
 
@@ -58,11 +59,10 @@ int ki,f0,f1;
 
 bool samSOS=false,chaseSam=false;//侍からのSOS, 犬と侍が一緒になる(防御の布陣)べきか
 //{{{ 入力を読む
-void read(ofstream &logfile){
+void read(){
 	// パラメータの読み込み
 //	scanf("%d%d%d%d",&remainingTime,&index,&width,&height);
 	cin >> remainingTime>>index>>width>>height;
-	
 	string line;
 	getline(cin, line);
 	// マップ情報の読み込み
@@ -70,14 +70,11 @@ void read(ofstream &logfile){
 		getline(cin,line);
 		REP(x,width)field[x][y] = line.at(x);
 	}
-
 	// キャラクタ情報の読み込み
 	REP(i,4){
 		// 侍情報の読み込み
-
 //		scanf("%d%d%d%d%d%d",&samsc[i],&sam[i][0],&sam[i][1],&samdir[i],&state[i],&staterem[i]);
 		cin >> samsc[i]>>sam[i][0]>>sam[i][1]>>samdir[i]>>state[i]>>staterem[i];
-
 		// 犬情報の読み込み
 //		scanf("%d%d%d%d",&dogsc[i],&dog[i][0],&dog[i][1],&dogdir[i]);
 		cin >> dogsc[i] >> dog[i][0] >> dog[i][1]>> dogdir[i];
@@ -378,64 +375,6 @@ bool isEnemySam(int x,int y){
 }
 //}}}
 //{{{ 袋小路に入った場合の挟み撃ち作戦(仮)
-//{{{ 第一案
-int f[4][11][2]={
-	{{4,3},{4,2},{4,1},{3,1},{2,1},{1,1},{1,2},{1,3},{1,4},{2,4},{3,4}},
-	{{3,12},{2,12},{1,12},{1,13},{1,14},{1,15},{2,15},{3,15},{4,15},{4,14},{4,13}},
-	{{12,3},{12,2},{12,1},{13,1},{14,1},{15,1},{15,2},{15,3},{15,4},{14,4},{13,4}},
-	{{4,3},{4,2},{4,1},{3,1},{2,1},{1,1},{1,2},{1,3},{1,4},{2,4},{3,4}},
-};
-
-/* 
-void fukurokouji(){
-	if(capture){
-		bool hit=false,isDog=false;
-		REP(i,4){
-			if(i==index)continue;
-			REP(fi,F){
-				if(sam[i][0]==f[ki][fi][0] and sam[i][1]==f[ki][fi][1])hit=true;
-				if(dog[i][0]==f[ki][fi][0] and dog[i][1]==f[ki][fi][1])isDog=true;
-			}
-		}
-		if(!hit or isDog){
-			capture=0;
-		}
-	}
-	if(capture==0){
-		if(itemNum>3 or samSOS){
-			capture=0;
-			return;
-		}
-		bool hit=false,isDog=false;
-		REP(k,K){
-			//		if(dists[index][index]){}
-			REP(i,4){
-				if(i==index)continue;
-				REP(fi,F){
-					if(sam[i][0]==f[k][fi][0] and sam[i][1]==f[k][fi][1])hit=true;
-					if(dog[i][0]==f[k][fi][0] and dog[i][1]==f[k][fi][1])isDog=true;
-				}
-			}
-			if(hit and !isDog){
-				ki=k;
-				break;
-			}
-		}
-		if(hit){
-			capture=1;
-			f0=0;f1=F-1;
-		}
-	}
-	if(capture==1 and (sam[index][0]==f[ki][f0][0] and sam[index][1]==f[ki][f0][1]
-				and dog[index][0]==f[ki][f1][0] and dog[index][1]==f[ki][f1][1]))capture=2;
-	if(capture==2){
-		if(sam[index][0]==f[ki][f0][0] and sam[index][1]==f[ki][f0][1])f0++;
-		if(dog[index][0]==f[ki][f1][0] and dog[index][1]==f[ki][f1][1])f1--;
-	}
-	return;//作戦続行
-}
-*/
-//}}}
 //{{{ 第二案
 int targetX=-1,targetY=-1,dogTarget=-1;
 //犬が呼び出す
@@ -495,7 +434,6 @@ void fukurokouji(int x,int y,int px,int py){
 	logfile<<endl;
 }
 //}}}
-
 //}}}
 
 //距離に対するバイアス
@@ -526,7 +464,7 @@ double samPriority(int x,int y){
 	if(dist[x][y]>remainingTime/8)return (double)-INF;
 	if(dist[x][y]<=0 or dist[x][y]==INF)return -1.0;
 	//{{{ 犬に追われている場合には行き止まりに入らない
-	logfile<<"nearDog: "<<nearDog<<endl;
+//	logfile<<"nearDog: "<<nearDog<<endl;
 	REP(di,4){
 		int x1=xs+dir[di][0],y1=ys+dir[di][1];
 		if(not fieldInner(x1,y1))continue;
@@ -543,7 +481,7 @@ double samPriority(int x,int y){
 		*/
 	double sc=0.0;
 //	if(bigItemNum==0 and (x==1 or y==1 or x==height-2 or y==width-2) and isItem(x,y))sc+=1000.0;
-	if(isItem(x,y) and nextSquare(x,y) and isolate(x,y) and bigItemNum<=2)sc+=200.0;
+//	if(isItem(x,y) and nextSquare(x,y) and isolate(x,y) and bigItemNum<=2)sc+=200.0;
 
 	if(targetX>=0 and x==targetX and y==targetY){
 		sc+=1000000.0;
@@ -602,6 +540,8 @@ double dogPriority(int i){
 		}
 	}
 	int x=sam[i][0],y=sam[i][1];
+	if(state[i]==1 or (state[i]==2 and dogsc[index]>0))return -INF;
+	double w=1000.0;
 	if(i==index){
 		//得点を渡すべきか
 		if(dogsc[index]>500.0 or 
@@ -610,11 +550,28 @@ double dogPriority(int i){
 		//		if(dogsc[index]==0 or dist[x][y]==0)return -1.0;
 		return (double)dogsc[index];
 	}else{
+		if(rank[index]<=2){//自分が2位以上
+			if(rank[i]==3)return w;//3位引きずり下ろし
+			else return -w;
+		}else if(rank[index]==3){//自分が3位
+			if(rank[i]==2){//2位引きずり下ろし
+				return w;
+			}else{
+				return -w;
+			}
+		}else{//自分が4位(最下位)
+			if(rank[i]==2 or rank[i]==3){//2位, 3位引きずりおろし
+				return w;
+			}else{
+				return -w;
+			}
+		}
 		//得点を奪え
 		if(state[i]==1)return (double)-INF;
 		if(state[i]==2 and dogsc[index]>0)return -INF;
 		double baseSc=(double)samsc[i];
-		return baseSc*0.2/dist[sam[i][0]][sam[i][1]];
+		return baseSc*0.2/dists[index][sam[i][0]][sam[i][1]];
+//		return baseSc*0.2/dist[sam[i][0]][sam[i][1]];
 	}
 }
 //{{{ Dog Position
@@ -668,6 +625,16 @@ int findDogEscape(int x,int y){
 }
 //}}}
 
+//{{{ Miscellaneous calc
+//{{{ Player Struct 
+struct Player{
+	int i,sc;
+	Player(int i,int sc):i(i),sc(sc){}
+	bool operator<(const Player &s) const {
+		return sc<s.sc;
+	}
+};
+//}}}
 void calcMiscellaneous(){
 	//{{{ calc near Dog
 	nearDog=INF;
@@ -688,7 +655,20 @@ void calcMiscellaneous(){
 		}
 	}
 	//}}}
+	//{{{ calc rank
+	vector<Player> vp;
+	REP(i,4)vp.push_back(Player(i,samsc[i]));
+	sort(vp.begin(),vp.end());
+	reverse(vp.begin(),vp.end());
+	REP(i,4)rank[vp[i].i]=i+1;
+	//}}}
+	logfile<<"rank: "<<endl;
+	REP(i,4){
+		logfile<<rank[i]<<" ";
+	}
+	logfile<<endl;
 }
+//}}}
 
 string direction(const int &p){
 	if(p==0)return "LEFT";
@@ -732,47 +712,39 @@ string calcDir(const bool &isSam){
 	if(p>=0)return direction(p);
 	int x0=sam[index][0],y0=sam[index][1];
 	if(isSam){
-		if(capture){
-			x0=f[ki][f0][0],y0=f[ki][f0][1];
-		}else{
-			double maxPriority=-1.0;
-			//		bool baseHit=false;
-			REP(x,width)REP(y,height){
-				if(not fieldInner(x,y))continue;
-				double pr=samPriority(x,y);
-				if(pr>maxPriority)maxPriority=pr,x0=x,y0=y;
-			}
-			//		if(!baseHit)baseX=x0,baseY=y0;
-			//{{{ 侍のSOS
-			samSOS=chaseSam=false;
-			if(itemNum<=2)chaseSam=true;
-			int myDogDist=dist[dog[index][0]][dog[index][1]];
-			if((state[index]==0 and nearDog<=4) or 
-					(state[index]==2 and nearDog<=2)){
-				samSOS=true;
-				if(state[index]==0)SHOGUNPOINT=300;
-			}
-			//SOSの時の侍の行動
-			if((samSOS and nearDog==0 and staterem[index]<=8) or 
-					(chaseSam and dogsc[index]>0 and remainingTime<myDogDist+20 and myDogDist<remainingTime+20)
-			  ){
-				if((state[index]==0 or state[index]==2) and !safeDog){
-					x0=dog[index][0],y0=dog[index][1];
-				}
+		double maxPriority=-1.0;
+		//		bool baseHit=false;
+		REP(x,width)REP(y,height){
+			if(not fieldInner(x,y))continue;
+			double pr=samPriority(x,y);
+			if(pr>maxPriority)maxPriority=pr,x0=x,y0=y;
+		}
+		//		if(!baseHit)baseX=x0,baseY=y0;
+		//{{{ 侍のSOS
+		samSOS=chaseSam=false;
+		if(itemNum<=2)chaseSam=true;
+		int myDogDist=dist[dog[index][0]][dog[index][1]];
+		if((state[index]==0 and nearDog<=4) or 
+				(state[index]==2 and nearDog<=2)){
+			samSOS=true;
+			if(state[index]==0)SHOGUNPOINT=300;
+		}
+		//SOSの時の侍の行動
+		if((samSOS and nearDog==0 and staterem[index]<=8) or 
+				(chaseSam and dogsc[index]>0 and remainingTime<myDogDist+20 and myDogDist<remainingTime+20)
+		  ){
+			if((state[index]==0 or state[index]==2) and !safeDog){
+				x0=dog[index][0],y0=dog[index][1];
 			}
 		}
 		//}}}
 	}else{
 		double maxPriority=-1.0;
 		//		if(samSOS)logfile<<d<<endl;
-		if(capture){
-			x0=f[ki][f1][0],y0=f[ki][f1][1];
-		}else{
-			REP(i,4){
-				if(i==index and dogsc[index]==0)continue;
-				double pr=dogPriority(i);
-				if(pr>maxPriority)maxPriority=pr,x0=sam[i][0],y0=sam[i][1];
-			}
+		REP(i,4){
+			if(i==index and dogsc[index]==0)continue;
+			double pr=dogPriority(i);
+			if(pr>maxPriority)maxPriority=pr,x0=sam[i][0],y0=sam[i][1];
 		}
 		targetX=targetY=-1;
 		logfile<<"=== BEGIN ====="<<endl;
@@ -787,8 +759,8 @@ string calcDir(const bool &isSam){
 		logfile<<"capture: "<<remainingTime<<" "<<targetX<<" "<<targetY<<endl;
 	}
 	//	logfile<<x0<<" "<<y0<<endl;
-//	logfile<<remainingTime<<endl;
-//	debugField(logfile,isSam);
+	//	logfile<<remainingTime<<endl;
+	//	debugField(logfile,isSam);
 	if(x0<0 or y0<0)return "NONE";
 	if(x0==xs and y0==ys)return "NONE";
 	//	logfile<<x0<<" "<<y0<<endl;
@@ -811,7 +783,7 @@ void calc(const bool &isSam){
 		isFirstCalled = false;
 		logfile.open("out.txt");
 	}
-	read(logfile);
+	read();
 	logfile<<isSam<<endl;
 	//	logfile<<"staterem: "<<staterem[index]<<endl;
 	safeDog=(sam[index][0]==dog[index][0] and sam[index][1]==dog[index][1]);
