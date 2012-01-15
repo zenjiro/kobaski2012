@@ -203,7 +203,7 @@ int inner(int x,int y,int index){
 	*/
 //}}}
 //{{{ デバッグ用
-void debugField(ofstream &logfile,const bool &isSam){
+void debugField(const bool &isSam){
 	//	logfile<<xs<<" "<<ys<<endl;
 	if(capture){
 		logfile<<"capture!!"<<endl;
@@ -375,7 +375,6 @@ bool isEnemySam(int x,int y){
 }
 //}}}
 //{{{ 袋小路に入った場合の挟み撃ち作戦(仮)
-//{{{ 第二案
 int targetX=-1,targetY=-1,dogTarget=-1;
 //犬が呼び出す
 //(px, py): 味方の場所, (x,y): 探索回廊
@@ -427,13 +426,14 @@ void fukurokouji(int x,int y,int px,int py){
 		}
 		px=x,py=y,x=nx,y=ny;
 	}
-	logfile<<"fukurokouij: "<<x0<<" "<<y0<<"->"<<x<<" "<<y<<endl;;
+	/*
+	logfile<<"fukurokouji: "<<x0<<" "<<y0<<"->"<<x<<" "<<y<<endl;;
 	REP(i,vp.size()){
 		logfile<<"("<<vp[i].first<<" "<<vp[i].second<<")";
 	}
 	logfile<<endl;
+	*/
 }
-//}}}
 //}}}
 
 //距離に対するバイアス
@@ -540,8 +540,8 @@ double dogPriority(int i){
 		}
 	}
 	int x=sam[i][0],y=sam[i][1];
-	if(state[i]==1 or (state[i]==2 and dogsc[index]>0))return -INF;
-	double w=1000.0;
+	if(dist[x][y]==INF)return -INF;
+	double w=1000000.0;
 	if(i==index){
 		//得点を渡すべきか
 		if(dogsc[index]>500.0 or 
@@ -550,25 +550,19 @@ double dogPriority(int i){
 		//		if(dogsc[index]==0 or dist[x][y]==0)return -1.0;
 		return (double)dogsc[index];
 	}else{
+		if(state[i]==1 or (state[i]==2 and dogsc[index]>0))return -INF;
+		//得点を奪え
 		if(rank[index]<=2){//自分が2位以上
 			if(rank[i]==3)return w;//3位引きずり下ろし
-			else return -w;
+			else if(rank[i]==4)return -w;//4位無視
 		}else if(rank[index]==3){//自分が3位
-			if(rank[i]==2){//2位引きずり下ろし
-				return w;
-			}else{
-				return -w;
-			}
+			if(rank[i]==2)return w;//2位引きずり下ろし
+			else if(rank[i]==4)return -w;//4位無視
 		}else{//自分が4位(最下位)
 			if(rank[i]==2 or rank[i]==3){//2位, 3位引きずりおろし
 				return w;
-			}else{
-				return -w;
 			}
 		}
-		//得点を奪え
-		if(state[i]==1)return (double)-INF;
-		if(state[i]==2 and dogsc[index]>0)return -INF;
 		double baseSc=(double)samsc[i];
 		return baseSc*0.2/dists[index][sam[i][0]][sam[i][1]];
 //		return baseSc*0.2/dist[sam[i][0]][sam[i][1]];
@@ -624,7 +618,6 @@ int findDogEscape(int x,int y){
 	return p;
 }
 //}}}
-
 //{{{ Miscellaneous calc
 //{{{ Player Struct 
 struct Player{
@@ -662,6 +655,11 @@ void calcMiscellaneous(){
 	reverse(vp.begin(),vp.end());
 	REP(i,4)rank[vp[i].i]=i+1;
 	//}}}
+	logfile<<"score: "<<endl;
+	REP(i,4){
+		logfile<<samsc[i]<<" ";
+	}
+	logfile<<endl;
 	logfile<<"rank: "<<endl;
 	REP(i,4){
 		logfile<<rank[i]<<" ";
@@ -741,26 +739,33 @@ string calcDir(const bool &isSam){
 	}else{
 		double maxPriority=-1.0;
 		//		if(samSOS)logfile<<d<<endl;
+		logfile<<"priority: ";
+		int targetId=-1;
 		REP(i,4){
-			if(i==index and dogsc[index]==0)continue;
+//			if(i==index and dogsc[index]==0)continue;
 			double pr=dogPriority(i);
-			if(pr>maxPriority)maxPriority=pr,x0=sam[i][0],y0=sam[i][1];
+			logfile<<i<<": "<<pr<<", ";
+			if(pr>maxPriority)maxPriority=pr,x0=sam[i][0],y0=sam[i][1],targetId=i;
 		}
+		logfile<<endl;
+		logfile<<"result: "<<x0<<" "<<y0<<endl;
+		logfile<<"dist: "<<dist[x0][y0]<<endl;
+		logfile<<"targetId: "<<targetId<<endl;
 		targetX=targetY=-1;
-		logfile<<"=== BEGIN ====="<<endl;
+//		logfile<<"=== BEGIN ====="<<endl;
 		REP(p,4){
 			int x1=xs+dir[p][0],y1=ys+dir[p][1];
 			if(not fieldInner(x1,y1))continue;
 			fukurokouji(x1,y1,xs,ys);
 		}
-		logfile<<"=== END ========"<<endl;
+//		logfile<<"=== END ========"<<endl;
 	}
-	if(targetX>=0){
-		logfile<<"capture: "<<remainingTime<<" "<<targetX<<" "<<targetY<<endl;
-	}
+//	if(targetX>=0){
+//		logfile<<"capture: "<<remainingTime<<" "<<targetX<<" "<<targetY<<endl;
+//	}
 	//	logfile<<x0<<" "<<y0<<endl;
 	//	logfile<<remainingTime<<endl;
-	//	debugField(logfile,isSam);
+//	debugField(isSam);
 	if(x0<0 or y0<0)return "NONE";
 	if(x0==xs and y0==ys)return "NONE";
 	//	logfile<<x0<<" "<<y0<<endl;
@@ -775,16 +780,21 @@ string calcDir(const bool &isSam){
 }
 
 void calc(const bool &isSam){
+	logfile.open("out.txt",std::ios::out|std::ios::app);
 	static bool isFirstCalled = true;
 	SHOGUNPOINT=DEFAULTSHOGUNPOINT;
 	// initialize random method when first called
 	if (isFirstCalled) {
 		srand((unsigned int)time(NULL));
 		isFirstCalled = false;
-		logfile.open("out.txt");
+//		logfile.open("out.txt");
 	}
 	read();
-	logfile<<isSam<<endl;
+	logfile<<"=====start turn======"<<endl;
+	if(isSam)
+		logfile<<"samurai,"<<index<<endl;
+	else
+		logfile<<"dog,"<<index<<endl;
 	//	logfile<<"staterem: "<<staterem[index]<<endl;
 	safeDog=(sam[index][0]==dog[index][0] and sam[index][1]==dog[index][1]);
 	//	if(safeDog)SHOGUNPOINT=30;
@@ -834,6 +844,7 @@ void calc(const bool &isSam){
 		}
 		if(found){
 			cout<<"NONE"<<endl;
+			logfile.close();
 			return;
 		}
 	}
@@ -849,34 +860,10 @@ void calc(const bool &isSam){
 		calcDist(dog[i][0],dog[i][1],j,cs[j],dists[j],prevs[j],points[j]);
 	}
 	//calcDist(xs,ys,index2,c,dist,prev,point);
-	//{{{ calc all dist
-	/*
-		REP(i,4){
-		REP(x,width)REP(y,width)c2[x][y]=c[x][y];
-		if(i==index and isSam){
-		REP(d,4){
-		int x1=xs+dir[d][0],y1=ys+dir[d][1];
-		if(not fieldInner(x1,y1))continue;
-		if(!isDog(x1,y1) and dogDanger(x1,y1) and c[x1][y1]!='p')c[x1][y1]='*';
-		}
-		}
-		calcDist(sam[i][0],sam[i][1],isSam,c2,dists[i],prevs[i],points[i]);
-		}
-		REP(i,4){
-		REP(x,width)REP(y,width)c2[x][y]=c[x][y];
-		calcDist(dog[i][0],dog[i][1],isSam,c2,dists[4+i],prevs[4+i],points[4+i]);
-		}
-		if(isSam){
-		dist=dists[index],prev=prevs[index],point=points[index];
-		}else{
-		dist=dists[index+4],prev=prevs[index+4],point=points[index+4];
-		}
-		*/
-	//}}}
-	//	fukurokouji();
 	//	if(isSam)setPrior(xs,ys);
 	calcMiscellaneous();
 	string ans=calcDir(isSam);
 	cout<<ans<<endl;
+	logfile.close();
 	return;
 }
