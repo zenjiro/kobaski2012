@@ -66,13 +66,13 @@ public class MyPlayer implements Player {
 			}
 		} else {
 			// 自分の侍に最も近い敵の侍を追いかける。
+			final Chara samurai = map.getMySamurai();
 			final Distance distance = this.getDistance(map.getMyDog(), true, map);
-			final Chara target = getNearestSamurai(
-					this.getDistance(map.getMySamurai(), false, map), map);
+			final Chara target = getNearestSamurai(this.getDistance(samurai, false, map), map);
 			if (target != null) {
 				return this.getDirection(target.getX(), target.getY(), distance.path);
 			} else {
-				return Direction.UNKNOWN;
+				return this.getDirection(samurai.getX(), samurai.getY(), distance.path);
 			}
 		}
 	}
