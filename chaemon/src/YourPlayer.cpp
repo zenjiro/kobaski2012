@@ -109,23 +109,23 @@ int inner2(int x,int y,bool isSam){
 				if(itemNum<=3){
 					if(existDog)result=2;
 					else{
-						if(samSOS and existSam)result=0;
+						if(samSOS and existSam)result=2;
 						else result=1;
 					}
 				}else{
 					if(existDog)result=2;
-					else if(existSam)result=0;
+					else if(existSam)result=2;
 					else result=1;
 				}
 			}else if(state[index]==1){
 				result=1;
 			}else if(state[index]==2){
-				if(existSam)result=0;
+				if(existSam)result=2;
 				else result=1;
 			}
 		}
 	}else{
-		if(existDog)result=0;
+		if(existDog)result=2;
 		else result=1;
 	}
 	return result;
@@ -146,16 +146,16 @@ int inner(int x,int y,int index){
 	if(isSam){
 		if(state[index]==0 or (state[index]==2 and staterem[index]<=1)){
 			if(existDog)result=2;
-			else if(existSam)result=0;
+			else if(existSam)result=2;
 			else result=1;
 		}else if(state[index]==1){
 			result=1;
 		}else if(state[index]==2){
-			if(existSam)result=0;
+			if(existSam)result=2;
 			else result=1;
 		}
 	}else{
-		if(existDog)result=0;
+		if(existDog)result=2;
 		else result=1;
 	}
 	return result;
