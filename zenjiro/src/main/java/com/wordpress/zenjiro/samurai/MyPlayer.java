@@ -86,7 +86,7 @@ public class MyPlayer implements Player {
 		int minDistance = Integer.MAX_VALUE;
 		Chara ret = null;
 		for (final Chara samurai : map.getAllSamurais()) {
-			if (samurai != map.getMySamurai() && samurai.getState() != CharaState.INVISIBLE) {
+			if (samurai != map.getMySamurai() && samurai.getState() == CharaState.NORMAL) {
 				if (distance.distance[samurai.getY()][samurai.getX()] < minDistance) {
 					ret = samurai;
 					minDistance = distance.distance[samurai.getY()][samurai.getX()];
