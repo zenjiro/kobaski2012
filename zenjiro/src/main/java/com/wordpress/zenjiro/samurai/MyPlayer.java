@@ -65,15 +65,35 @@ public class MyPlayer implements Player {
 				return direction;
 			}
 		} else {
-			// とりあえずプレイヤ1をひたすら追いかけさせる。
+			// 自分の侍に最も近い敵の侍を追いかける。
 			final Distance distance = this.getDistance(map.getMyDog(), false, map);
-			final Chara target = map.getSamurai(1);
-			if (target.getState() != CharaState.INVISIBLE) {
+			final Chara target = getNearestSamurai(
+					this.getDistance(map.getMySamurai(), false, map), map);
+			if (target != null) {
 				return this.getDirection(target.getX(), target.getY(), distance.path);
 			} else {
 				return Direction.UNKNOWN;
 			}
 		}
+	}
+
+	/**
+	 * @param distance 侍からの距離
+	 * @param map マップ
+	 * @return 自分の侍に最も近い敵の侍
+	 */
+	private Chara getNearestSamurai(final Distance distance, final Map map) {
+		int minDistance = Integer.MAX_VALUE;
+		Chara ret = null;
+		for (final Chara samurai : map.getAllSamurais()) {
+			if (samurai != map.getMySamurai() && samurai.getState() != CharaState.INVISIBLE) {
+				if (distance.distance[samurai.getY()][samurai.getX()] < minDistance) {
+					ret = samurai;
+					minDistance = distance.distance[samurai.getY()][samurai.getX()];
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
